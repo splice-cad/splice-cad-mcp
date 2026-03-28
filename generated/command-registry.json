@@ -1,0 +1,5918 @@
+{
+  "description": "Auto-generated command registry from frontend/src/commands/. Lists all commands with constructor parameters, organized by domain (plan, svg-editor, harness-builder).",
+  "generated_at": "2026-03-27T20:39:50.284Z",
+  "command_count": 261,
+  "commands": {
+    "AddBomEntryCommand": {
+      "file": "AddBomEntryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "entry",
+          "type": "BomEntry",
+          "required": true
+        }
+      ]
+    },
+    "AddBranchPointPartCommand": {
+      "file": "AddBranchPointPartCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "part",
+          "type": "BranchPointPart",
+          "required": true
+        }
+      ]
+    },
+    "AddBundleAccessoryCommand": {
+      "file": "AddBundleAccessoryCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "accessoryData",
+          "type": "Omit<BundleAccessory, 'id'>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "AddBundleLabelCommand": {
+      "file": "AddBundleLabelCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "label",
+          "type": "BundleLabel",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "AddCableCommand": {
+      "file": "AddCableCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "cable",
+          "type": "PlanCable",
+          "required": true
+        }
+      ]
+    },
+    "AddConductorSpliceCommand": {
+      "file": "AddConductorSpliceCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "splice",
+          "type": "ConductorSplice",
+          "required": true
+        }
+      ]
+    },
+    "AddConnectionCommand": {
+      "file": "AddConnectionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "end1",
+          "type": "ConnectionTermination",
+          "required": true
+        },
+        {
+          "name": "end2",
+          "type": "ConnectionTermination",
+          "required": true
+        },
+        {
+          "name": "wire",
+          "type": "WirePart | undefined",
+          "required": true
+        },
+        {
+          "name": "unit",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddDesignNoteCommand": {
+      "file": "AddDesignNoteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "noteData",
+          "type": "Omit<DesignNote, 'id' | 'created_at'>",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "AddDrawingElementCommand": {
+      "file": "AddDrawingElementCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "AddDrawingElementOptions",
+          "required": true
+        }
+      ]
+    },
+    "AddDrawingSheetCommand": {
+      "file": "AddDrawingSheetCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "sheetName",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "sheetNumber",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "AddLinkAccessoryCommand": {
+      "file": "AddLinkAccessoryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "accessory",
+          "type": "PlanLinkAccessory",
+          "required": true
+        }
+      ]
+    },
+    "AddLinkCommand": {
+      "file": "AddLinkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "link",
+          "type": "PlanLink",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "AddMateCommand": {
+      "file": "AddMateCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "connector1Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "connector2Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "AddMateOptions",
+          "required": false
+        }
+      ]
+    },
+    "AddNetCommand": {
+      "file": "AddNetCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "net",
+          "type": "PlanNet",
+          "required": true
+        }
+      ]
+    },
+    "AddNewConductorCommand": {
+      "file": "AddNewConductorCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductor",
+          "type": "PlanConductor",
+          "required": true
+        }
+      ]
+    },
+    "AddNodeCommand": {
+      "file": "AddNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "node",
+          "type": "PlanNode",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "AddNodesFromBomCommand": {
+      "file": "AddNodesFromBomCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodes",
+          "type": "PlanNode[]",
+          "required": true
+        }
+      ]
+    },
+    "AddPageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "page",
+          "type": "PlanPage",
+          "required": true
+        }
+      ]
+    },
+    "AddPartCommand": {
+      "file": "AddPartCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "partItems",
+          "type": "AddPartDto[]",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "AddPartsCommand": {
+      "file": "AddPartsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        },
+        {
+          "name": "items",
+          "type": "AddPartDto[]",
+          "required": true
+        },
+        {
+          "name": "viewportState",
+          "type": "ViewportState",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddPathPointCommand": {
+      "file": "AddPathPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pathIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "insertAtIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "point",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddPdfPageCommand": {
+      "file": "AddPdfPageCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "preset",
+          "type": "keyof typeof PAGE_SIZE_PRESETS",
+          "required": true
+        },
+        {
+          "name": "origin",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        }
+      ]
+    },
+    "AddPinCommand": {
+      "file": "AddPinCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinData",
+          "type": "PinData",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddPolygonPointCommand": {
+      "file": "AddPolygonPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "polygonIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "insertAtIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "point",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddSignalCommand": {
+      "file": "AddSignalCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "signal",
+          "type": "PlanSignalDefinition",
+          "required": true
+        }
+      ]
+    },
+    "AddSplicePositionCommand": {
+      "file": "AddSplicePositionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "spliceKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddSvgElementCommand": {
+      "file": "AddSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementData",
+          "type": "ElementData",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "AddToDeviceGroupCommand": {
+      "file": "AddToDeviceGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "AddWireGroupCommand": {
+      "file": "AddWireGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "wireGroup",
+          "type": "PlanWireGroup",
+          "required": true
+        }
+      ]
+    },
+    "AlignCommand": {
+      "file": "AlignCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "direction",
+          "type": "AlignDirection",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "selectedItems",
+          "type": "AlignableItems",
+          "required": true
+        },
+        {
+          "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "AlignMatesToPinsCommand": {
+      "file": "AlignMatesToPinsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "AlignMatePositionChange[]",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "AlignNodesCommand": {
+      "file": "AlignNodesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "alignmentType",
+          "type": "AlignmentType",
+          "required": true
+        },
+        {
+          "name": "positionGetter",
+          "type": "(nodeId: string) => Position",
+          "required": false
+        },
+        {
+          "name": "sizeGetter",
+          "type": "(nodeId: string) => Size",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "ApplyLayoutCommand": {
+      "file": "ApplyLayoutCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "snapshot",
+          "type": "LayoutSnapshot",
+          "required": true
+        },
+        {
+          "name": "mapping",
+          "type": "LayoutMapping",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "ApplyPatternCommand": {
+      "file": "PatternCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "elementType",
+          "type": "'line' | 'rectangle' | 'circle' | 'path' | 'polygon'",
+          "required": true
+        },
+        {
+          "name": "elementIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPattern",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "newPattern",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ArrangeFromPlanCommand": {
+      "file": "ArrangeFromPlanCommand",
+      "domain": "harness-builder",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "ArrangeFromPlanOptions",
+          "required": true
+        }
+      ]
+    },
+    "ArrangeFromSchematicCommand": {
+      "file": "ArrangeFromSchematicCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "ArrangeFromSchematicOptions",
+          "required": true
+        }
+      ]
+    },
+    "AssignBomToConductorCommand": {
+      "file": "AssignBomToConductorCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "bomEntryId",
+          "type": "string | undefined",
+          "required": true
+        }
+      ]
+    },
+    "AssignBomToLinkCommand": {
+      "file": "AssignBomToLinkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "bomEntryId",
+          "type": "string | undefined",
+          "required": true
+        }
+      ]
+    },
+    "AssignBomToNodeCommand": {
+      "file": "AssignBomToNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "bomEntryId",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "syncOptions",
+          "type": "BomPinSyncOptions",
+          "required": false
+        }
+      ]
+    },
+    "AssignToPageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        }
+      ]
+    },
+    "AttachDrainTerminationCommand": {
+      "file": "AttachDrainTerminationCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "shape",
+          "type": "ConnectorShape | 'flying_lead'",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "AutoArrangeCommand": {
+      "file": "AutoArrangeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "targetNodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "positionGetter",
+          "type": "(id: string) => { x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "sizeGetter",
+          "type": "(id: string) => NodeDims",
+          "required": true
+        },
+        {
+          "name": "isSchematic",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "AutoRouteCommand": {
+      "file": "AutoRouteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        },
+        {
+          "name": "selectedItems",
+          "type": "SelectedItemsByType",
+          "required": true
+        }
+      ]
+    },
+    "BaseSwapCommand": {
+      "file": "BaseSwapCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "swapData",
+          "type": "SwapPartData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BatchCommand": {
+      "file": "BatchCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "commands",
+          "type": "Command[]",
+          "required": false
+        }
+      ]
+    },
+    "BatchUpdateDrawingElementsCommand": {
+      "file": "BatchUpdateDrawingElementsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementUpdates",
+          "type": "ElementUpdate[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "unknown",
+          "required": false
+        }
+      ]
+    },
+    "BatchUpdateDrawingSheetsCommand": {
+      "file": "UpdateDrawingSheetCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "sheetUpdates",
+          "type": "{ sheetId: string; updates: Partial<DrawingSheet> }[]",
+          "required": true
+        }
+      ]
+    },
+    "BulkCableCoreCommand": {
+      "file": "BulkCableCoreCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "config",
+          "type": "CableBulkConfig",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkChangePinRadiiCommand": {
+      "file": "BulkChangePinRadiiCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinRadii",
+          "type": "Array<{index: number; oldRadius: number; newRadius: number}>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkConnectionCommand": {
+      "file": "BulkConnectionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        },
+        {
+          "name": "connections",
+          "type": "Array<{ end1: ConnectionTermination; end2: ConnectionTermination; wire?: WirePart; }>",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkCrossoverCommand": {
+      "file": "BulkCrossoverCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "config",
+          "type": "CrossoverConfig",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkEditPlanCommand": {
+      "file": "BulkEditPlanCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "beforeSnapshot",
+          "type": "PlanData",
+          "required": true
+        },
+        {
+          "name": "afterSnapshot",
+          "type": "PlanData",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkEditWireCommand": {
+      "file": "BulkEditWireCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "BulkWireUpdate[]",
+          "required": true
+        }
+      ]
+    },
+    "BulkEditWirePropertiesCommand": {
+      "file": "BulkEditWirePropertiesCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "WirePropertyUpdate[]",
+          "required": true
+        }
+      ]
+    },
+    "BulkMateCommand": {
+      "file": "BulkMateCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "hubNodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "entries",
+          "type": "BulkMateEntry[]",
+          "required": true
+        }
+      ]
+    },
+    "BulkMoveCommand": {
+      "file": "BulkMoveCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "selectedItems",
+          "type": "SelectedItemsByType",
+          "required": true
+        },
+        {
+          "name": "deltaX",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "deltaY",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "startPositions",
+          "type": "Map<string, { x: number; y: number }>",
+          "required": false
+        }
+      ]
+    },
+    "BulkPlanConnectCommand": {
+      "file": "BulkPlanConnectCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "sourceNodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "targetNodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "connections",
+          "type": "BulkConnection[]",
+          "required": true
+        },
+        {
+          "name": "connectionTypeOverride",
+          "type": "ConnectionType",
+          "required": false
+        }
+      ]
+    },
+    "BulkRenameCablesCommand": {
+      "file": "BulkRenameCablesCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "renames",
+          "type": "Map<string, string>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "BulkSetContactCommand": {
+      "file": "BulkSetContactCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "gauge",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "termination",
+          "type": "EndpointTermination",
+          "required": true
+        },
+        {
+          "name": "contactPart",
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }",
+          "required": false
+        }
+      ]
+    },
+    "BulkSetWirePnCommand": {
+      "file": "BulkSetWirePnCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "mode",
+          "type": "BulkWirePnMode",
+          "required": true
+        },
+        {
+          "name": "wirePart",
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }",
+          "required": true
+        }
+      ]
+    },
+    "BulkStraightThroughCommand": {
+      "file": "BulkStraightThroughCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "config",
+          "type": "StraightThroughConfig",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "BulkWireSwapCommand": {
+      "file": "BulkWireSwapCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "bulkSwapData",
+          "type": "BulkWireSwapData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangeElementPropertiesCommand": {
+      "file": "ChangeElementPropertiesCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "element",
+          "type": "SVGElement",
+          "required": true
+        },
+        {
+          "name": "propertyChanges",
+          "type": "Record<string, { oldValue: any; newValue: any }>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangeGridSizeCommand": {
+      "file": "ChangeGridSizeCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "oldGridSize",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newGridSize",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangePinGenderCommand": {
+      "file": "ChangePinGenderCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldGender",
+          "type": "'male' | 'female'",
+          "required": true
+        },
+        {
+          "name": "newGender",
+          "type": "'male' | 'female'",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangePinNumberCommand": {
+      "file": "ChangePinNumberCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPinNumber",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPinNumber",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangePinRadiusCommand": {
+      "file": "ChangePinRadiusCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldRadius",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newRadius",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ChangeStoreElementPropertiesCommand": {
+      "file": "ChangeStoreElementPropertiesCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementType",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "elementIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "changes",
+          "type": "PropertyChange[]",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ClearAllPinsCommand": {
+      "file": "ClearAllPinsCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ClearAllWaypointsCommand": {
+      "file": "ClearAllWaypointsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "ClearBundleWaypointsCommand": {
+      "file": "ClearBundleWaypointsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "wireInstanceIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "ClearCanvasCommand": {
+      "file": "ClearCanvasCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ClearMateCommand": {
+      "file": "ClearMateCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "connectorId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "ClearPatternCommand": {
+      "file": "PatternCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "elementType",
+          "type": "'line' | 'rectangle' | 'circle' | 'path' | 'polygon'",
+          "required": true
+        },
+        {
+          "name": "elementIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPattern",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ClearPlanCanvasCommand": {
+      "file": "ClearPlanCanvasCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": []
+    },
+    "ClearWaypointsCommand": {
+      "file": "ClearWaypointsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "connectionKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "CloneDrawingSheetCommand": {
+      "file": "CloneDrawingSheetCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "sourceSheetId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "CollapseAllCommand": {
+      "file": "CollapseAllCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "newCollapsedState",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "CollapseCableCoresCommand": {
+      "file": "CollapseCableCoresCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newCollapsedState",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "previousCollapsedState",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "CollapseConnectorPinsCommand": {
+      "file": "CollapseConnectorPinsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "connectorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newCollapsedState",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "previousCollapsedState",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "ConsolidateBundlesToBranchPointCommand": {
+      "file": "ConsolidateBundlesToBranchPointCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "ConvertCableToWiresCommand": {
+      "file": "ConvertCableToWiresCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "cableKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ConvertNodeTypeCommand": {
+      "file": "ConvertNodeTypeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "targetType",
+          "type": "PlanNodeType",
+          "required": true
+        },
+        {
+          "name": "targetCategory",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ConvertWireBundleToCableCommand": {
+      "file": "ConvertWireBundleToCableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "bundleKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "{ cableMpn?: string; cableManufacturer?: string; shielded?: boolean; }",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "CopyCommand": {
+      "file": "CopyCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "selectedKeys",
+          "type": "{ connectors: string[]; cables: string[]; notes: string[]; wires?: string[]; wireBundles?: string[]; }",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "CreateAssemblyFromSelectionCommand": {
+      "file": "CreateAssemblyFromSelectionCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "formData",
+          "type": "AssemblyFormData",
+          "required": true
+        }
+      ]
+    },
+    "CreateDeviceGroupCommand": {
+      "file": "CreateDeviceGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "{ partNumber?: string; description?: string; color?: string; }",
+          "required": false
+        }
+      ]
+    },
+    "CreateVisualGroupCommand": {
+      "file": "CreateVisualGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bounds",
+          "type": "{ x: number; y: number; width: number; height: number }",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "{ name?: string; color?: string; backgroundColor?: string; parentGroupId?: string; zIndex?: number; nodeIds?: string[]; }",
+          "required": false
+        }
+      ]
+    },
+    "DeleteAssemblyRefCommand": {
+      "file": "DeleteAssemblyRefCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "assemblyRefId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeleteBomEntryCommand": {
+      "file": "DeleteBomEntryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bomEntryId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeleteCableCommand": {
+      "file": "DeleteCableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "cableKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteCableConnectionCommand": {
+      "file": "DeleteCableConnectionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "cableWireKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteConnectorCommand": {
+      "file": "DeleteConnectorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "connectorKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteDeviceGroupCommand": {
+      "file": "DeleteDeviceGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeleteNetCommand": {
+      "file": "DeleteNetCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "netName",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeletePartsCommand": {
+      "file": "DeletePartsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "keys",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeletePathPointCommand": {
+      "file": "DeletePathPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pathIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pointIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "deletedPoint",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeletePdfPageCommand": {
+      "file": "DeletePdfPageCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        }
+      ]
+    },
+    "DeletePinCommand": {
+      "file": "DeletePinCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pinData",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeletePolygonPointCommand": {
+      "file": "DeletePolygonPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "polygonIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pointIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "deletedPoint",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteSignalCommand": {
+      "file": "DeleteSignalCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "signalId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeleteSplicePositionCommand": {
+      "file": "DeleteSplicePositionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "spliceKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "pinNumber",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteStoreElementCommand": {
+      "file": "DeleteStoreElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementType",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "elementIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteSubassemblyInstanceCommand": {
+      "file": "SubassemblyInstanceCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "instanceId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DeleteSvgElementCommand": {
+      "file": "DeleteSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elements",
+          "type": "SVGElement | SVGElement[]",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteVisualGroupCommand": {
+      "file": "DeleteVisualGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "DeleteWireBundleCommand": {
+      "file": "DeleteWireBundleCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "bundleKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DeleteWireCommand": {
+      "file": "DeleteWireCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "wireKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DissolveAssemblyRefCommand": {
+      "file": "DissolveAssemblyRefCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "assemblyRefId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DissolveSubassemblyInstanceCommand": {
+      "file": "SubassemblyInstanceCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "instanceId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "DistributeNodesCommand": {
+      "file": "DistributeNodesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "distributeType",
+          "type": "DistributeType",
+          "required": true
+        },
+        {
+          "name": "positionGetter",
+          "type": "(nodeId: string) => { x: number; y: number }",
+          "required": false
+        },
+        {
+          "name": "sizeGetter",
+          "type": "(nodeId: string) => DistributeNodeSize",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "DistributeWithSpacingCommand": {
+      "file": "DistributeWithSpacingCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "NodePositionChange[]",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "DragLayerOrderCommand": {
+      "file": "LayerOrderCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "dragIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "dropIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "elements",
+          "type": "Array<{elementId: string; oldLayer: number; newLayer: number}>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "DrcClearDismissalsCommand": {
+      "file": "DrcDismissCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": []
+    },
+    "DrcDismissCommand": {
+      "file": "DrcDismissCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "warningKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "dismiss",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "DuplicatePageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "sourcePageId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "EditCableCommand": {
+      "file": "EditCableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "partKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPartData",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "EditConnectorCommand": {
+      "file": "EditConnectorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "partKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPartData",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "EditDesignNoteCommand": {
+      "file": "EditDesignNoteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldContent",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "newContent",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "oldTitle",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "newTitle",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "EditWireCommand": {
+      "file": "EditWireCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "partKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPartData",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "FitNodesToContentCommand": {
+      "file": "FitNodesToContentCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "NodeFitChange[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "FixWaypointsCommand": {
+      "file": "FixWaypointsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "scope",
+          "type": "string[] | undefined",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "FlipAllPinGendersCommand": {
+      "file": "FlipAllPinGendersCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinGenders",
+          "type": "Array<{index: number; oldGender: 'male' | 'female'; newGender: 'male' | 'female'}>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "GeneratePinPatternCommand": {
+      "file": "GeneratePinPatternCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "patternData",
+          "type": "PinPatternData",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "GroupDeleteSvgElementCommand": {
+      "file": "GroupDeleteSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "selectedElements",
+          "type": "{ lines: string[]; rectangles: string[]; circles: string[]; paths: string[]; polygons: string[]; texts: string[]; malePins: string[]; femalePins: string[]; customSvgs: string[]; }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "GroupMoveSvgElementCommand": {
+      "file": "GroupMoveSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "selectedElements",
+          "type": "{ lines: string[]; rectangles: string[]; circles: string[]; paths: string[]; polygons: string[]; texts: string[]; malePins: string[]; femalePins: string[]; customSvgs: string[]; }",
+          "required": true
+        },
+        {
+          "name": "deltaX",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "deltaY",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "initialPositions",
+          "type": "Map<string, any>",
+          "required": false
+        }
+      ]
+    },
+    "ImportGeneratedHarnessCommand": {
+      "file": "ImportGeneratedHarnessCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "generatedHarness",
+          "type": "GeneratedHarnessData",
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "'replace' | 'merge'",
+          "required": false
+        },
+        {
+          "name": "warnings",
+          "type": "string[]",
+          "required": false
+        }
+      ]
+    },
+    "InlineBranchPointCommand": {
+      "file": "InlineBranchPointCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "branchPointId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "InsertFragmentCommand": {
+      "file": "InsertFragmentCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "fragment",
+          "type": "PlanFragment",
+          "required": true
+        },
+        {
+          "name": "targetPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "fragmentName",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "fragmentTemplateId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "InsertSpliceCommand": {
+      "file": "InsertSpliceCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "wireKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "clickPosition",
+          "type": "{ x: number; y: number }",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "LayerOrderCommand": {
+      "file": "LayerOrderCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLayer",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newLayer",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "direction",
+          "type": "'up' | 'down' | 'top' | 'bottom'",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MergeBranchPointsCommand": {
+      "file": "MergeBranchPointsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bp1Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "bp2Id",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "MergeBundlesCommand": {
+      "file": "MergeBundlesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "link1Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "link2Id",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "MergeDuplicateLinksCommand": {
+      "file": "MergeDuplicateLinksCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MirrorStoreElementCommand": {
+      "file": "MirrorStoreElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "axis",
+          "type": "'horizontal' | 'vertical' | 'both'",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MoveBPToBundleCommand": {
+      "file": "MoveBPToBundleCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bpId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "targetLinkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "MoveConductorSpliceCommand": {
+      "file": "MoveConductorSpliceCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "spliceId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newBpId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "MoveConnectionCommand": {
+      "file": "MoveConnectionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "connectionKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "fromTermination",
+          "type": "ConnectionTermination",
+          "required": true
+        },
+        {
+          "name": "toTermination",
+          "type": "ConnectionTermination",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "MoveDrawingElementCommand": {
+      "file": "MoveDrawingElementCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        }
+      ]
+    },
+    "MoveMultipleLabelsCommand": {
+      "file": "MoveMultipleLabelsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "Map<string, { oldOffset: number; newOffset: number }>",
+          "required": true
+        }
+      ]
+    },
+    "MoveNodeCommand": {
+      "file": "MoveNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "Position",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "Position",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "MoveNodesCommand": {
+      "file": "MoveNodesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "NodePositionChange[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "MovePathPointCommand": {
+      "file": "MovePathPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pathIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pointIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MovePinCommand": {
+      "file": "MovePinCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "pinIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MovePolygonPointCommand": {
+      "file": "MovePolygonPointCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "polygonIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pointIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MoveSchematicPositionsCommand": {
+      "file": "MoveSchematicPositionsCommand",
+      "domain": "plan",
+      "stores": [
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "NodePositionChange[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MoveSvgElementCommand": {
+      "file": "MoveSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "elementType",
+          "type": "'line' | 'rectangle' | 'circle' | 'path' | 'polygon' | 'malePin' | 'femalePin'",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "Record<string, number>",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "Record<string, number>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "MoveToPageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "targetPageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        }
+      ]
+    },
+    "MoveWireAnchorCommand": {
+      "file": "MoveWireAnchorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "anchorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldAnchor",
+          "type": "WireAnchor",
+          "required": true
+        },
+        {
+          "name": "newAnchor",
+          "type": "WireAnchor",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "NewHarnessCommand": {
+      "file": "NewHarnessCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "storeRefs",
+          "type": "HarnessStoreRefs",
+          "required": true
+        }
+      ]
+    },
+    "PasteCommand": {
+      "file": "PasteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "clipboardNodes",
+          "type": "PlanNode[]",
+          "required": true
+        },
+        {
+          "name": "clipboardLinks",
+          "type": "PlanLink[]",
+          "required": true
+        },
+        {
+          "name": "clipboardConductors",
+          "type": "PlanConductor[]",
+          "required": false
+        },
+        {
+          "name": "clipboardConductorSplices",
+          "type": "ConductorSplice[]",
+          "required": false
+        },
+        {
+          "name": "clipboardWireGroups",
+          "type": "PlanWireGroup[]",
+          "required": false
+        },
+        {
+          "name": "clipboardCables",
+          "type": "PlanCable[]",
+          "required": false
+        },
+        {
+          "name": "clipboardMates",
+          "type": "MateRelationship[]",
+          "required": false
+        },
+        {
+          "name": "clipboardDeviceGroups",
+          "type": "DeviceGroup[]",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "clipboardNodePageSizes",
+          "type": "Record<string, Record<string, { width: number; height: number }>>",
+          "required": false
+        },
+        {
+          "name": "clipboardNodePagePositions",
+          "type": "Record<string, Record<string, { x: number; y: number }>>",
+          "required": false
+        },
+        {
+          "name": "clipboardLinkPageGeometry",
+          "type": "Record<string, Record<string, any>>",
+          "required": false
+        },
+        {
+          "name": "clipboardSchematic",
+          "type": "PasteSchematicData",
+          "required": false
+        },
+        {
+          "name": "clipboardBom",
+          "type": "BomEntry[]",
+          "required": false
+        }
+      ]
+    },
+    "PasteElementsCommand": {
+      "file": "PasteElementsCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "clipboardElements",
+          "type": "Array<{ element: SvgElement; type: string }>",
+          "required": true
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "PastePinTableCommand": {
+      "file": "PastePinTableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "connectorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "parsed",
+          "type": "ParsedPasteResult",
+          "required": true
+        }
+      ]
+    },
+    "PlaceAssemblyCommand": {
+      "file": "PlaceAssemblyCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bomEntry",
+          "type": "BomEntry",
+          "required": true
+        },
+        {
+          "name": "position",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "PushBomCommand": {
+      "file": "PushBomCommand",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "projectStore",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "pushItems",
+          "type": "PushItem[]",
+          "required": true
+        }
+      ]
+    },
+    "RedesignateNodesCommand": {
+      "file": "RedesignateNodesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "direction",
+          "type": "RedesignateDirection",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "type": "RedesignateScope",
+          "required": true
+        },
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": false
+        },
+        {
+          "name": "collision",
+          "type": "RedesignateCollision",
+          "required": false
+        },
+        {
+          "name": "prefixOverrides",
+          "type": "Map<string, string>",
+          "required": false
+        },
+        {
+          "name": "enabledGroupKeys",
+          "type": "Set<string>",
+          "required": false
+        },
+        {
+          "name": "pageNodeIds",
+          "type": "string[]",
+          "required": false
+        }
+      ]
+    },
+    "RedirectLinkCommand": {
+      "file": "RedirectLinkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "endpoint",
+          "type": "'source' | 'target'",
+          "required": true
+        },
+        {
+          "name": "newNodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "remainingHandling",
+          "type": "RemainingSegmentHandling",
+          "required": false
+        }
+      ]
+    },
+    "RemoveBezierPathCommand": {
+      "file": "UpdateBezierPathCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "assemblyElementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "edgeId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveBranchPointPartCommand": {
+      "file": "RemoveBranchPointPartCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "partId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveBundleAccessoryCommand": {
+      "file": "RemoveBundleAccessoryCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "accessoryId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "RemoveBundleLabelCommand": {
+      "file": "RemoveBundleLabelCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "labelId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "RemoveCableCommand": {
+      "file": "RemoveCableCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveConductorSpliceCommand": {
+      "file": "RemoveConductorSpliceCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "spliceId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveConnectionCommand": {
+      "file": "RemoveConnectionCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "connectionKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "RemoveDesignNoteCommand": {
+      "file": "RemoveDesignNoteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "RemoveDrawingElementCommand": {
+      "file": "RemoveDrawingElementCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveDrawingSheetCommand": {
+      "file": "RemoveDrawingSheetCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "sheetId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveFromDeviceGroupCommand": {
+      "file": "RemoveFromDeviceGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveFromPageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        }
+      ]
+    },
+    "RemoveLinkAccessoryCommand": {
+      "file": "RemoveLinkAccessoryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "accessoryId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveLinkCommand": {
+      "file": "RemoveLinkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveMateCommand": {
+      "file": "RemoveMateCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "mateId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveNewConductorCommand": {
+      "file": "RemoveNewConductorCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemoveNodeCommand": {
+      "file": "RemoveNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "RemovePageCommand": {
+      "file": "RemovePageCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "deleteMode",
+          "type": "'delete' | 'reassign'",
+          "required": true
+        },
+        {
+          "name": "reassignToPageId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "RemovePartCommand": {
+      "file": "RemovePartCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "partKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "RemoveWireGroupCommand": {
+      "file": "RemoveWireGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "wireGroupId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "ReorderPagesCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "newOrder",
+          "type": "string[]",
+          "required": true
+        }
+      ]
+    },
+    "RepairPlanCommand": {
+      "file": "RepairPlanCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": []
+    },
+    "ReplaceBomCommand": {
+      "file": "ImportBomCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "newEntries",
+          "type": "BomEntry[]",
+          "required": true
+        }
+      ]
+    },
+    "RerouteConductorsCommand": {
+      "file": "RerouteConductorsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "newLinkPath",
+          "type": "string[]",
+          "required": true
+        }
+      ]
+    },
+    "ResetAllJogOffsetsCommand": {
+      "file": "ResetAllJogOffsetsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": []
+    },
+    "ResetLinksPathCommand": {
+      "file": "ResetLinksPathCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "ResizeBundleCommand": {
+      "file": "ResizeBundleCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "bundleId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newWidth",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldWidth",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "ResizeCableCommand": {
+      "file": "ResizeCableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newWidth",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldWidth",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "ResizeConnectorCommand": {
+      "file": "ResizeConnectorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "connectorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newWidth",
+          "type": "number | undefined",
+          "required": true
+        },
+        {
+          "name": "oldWidth",
+          "type": "number | undefined",
+          "required": true
+        },
+        {
+          "name": "newHeight",
+          "type": "number | undefined",
+          "required": false
+        },
+        {
+          "name": "oldHeight",
+          "type": "number | undefined",
+          "required": false
+        }
+      ]
+    },
+    "ResizeDesignNoteCommand": {
+      "file": "ResizeDesignNoteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldWidth",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newWidth",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        }
+      ]
+    },
+    "ResizeNodeCommand": {
+      "file": "ResizeNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldSize",
+          "type": "Size | undefined",
+          "required": true
+        },
+        {
+          "name": "newSize",
+          "type": "Size",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "Position",
+          "required": false
+        },
+        {
+          "name": "newPosition",
+          "type": "Position",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "ResizeNodesCommand": {
+      "file": "ResizeNodesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "NodeResizeChange[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "ResizeSchematicCommand": {
+      "file": "ResizeSchematicCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "changes",
+          "type": "SchematicResizeChange[]",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "ResizeSvgElementCommand": {
+      "file": "ResizeSvgElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "element",
+          "type": "SVGElement | any",
+          "required": true
+        },
+        {
+          "name": "oldSize",
+          "type": "Record<string, number>",
+          "required": true
+        },
+        {
+          "name": "newSize",
+          "type": "Record<string, number>",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "RotateStoreElementCommand": {
+      "file": "RotateStoreElementCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldRotation",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newRotation",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetBundleCompactCommand": {
+      "file": "SetBundleCompactCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "bundleIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "compact",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "SetBundleVisibilityCommand": {
+      "file": "SetBundleVisibilityCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "bundleIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "SetContactPartCommand": {
+      "file": "SetContactPartCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'start' | 'end'",
+          "required": true
+        },
+        {
+          "name": "contactPart",
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }",
+          "required": true
+        }
+      ]
+    },
+    "SetJogWaypointPositionsCommand": {
+      "file": "SetJogWaypointPositionsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "StoreWithBatchWaypoints",
+          "required": true
+        },
+        {
+          "name": "beforePositions",
+          "type": "Map<string, { x: number; y: number }>",
+          "required": true
+        },
+        {
+          "name": "afterPositions",
+          "type": "Map<string, { x: number; y: number }>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "SetJogXOffsetCommand": {
+      "file": "SetJogXOffsetCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newOffset",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "SetLinksPathStyleCommand": {
+      "file": "SetLinksPathStyleCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "newPathStyle",
+          "type": "PlanLinkPathStyle",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "SetMateCommand": {
+      "file": "SetMateCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "connector1Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "connector2Id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "SetMateOptions",
+          "required": false
+        }
+      ]
+    },
+    "SetMatingBehaviorCommand": {
+      "file": "SetMatingBehaviorCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newBehavior",
+          "type": "MatingBehavior | undefined",
+          "required": true
+        }
+      ]
+    },
+    "SetMultipleJogXOffsetsCommand": {
+      "file": "SetMultipleJogXOffsetsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "newOffsets",
+          "type": "Map<string, number>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetMultipleLabelOffsetsCommand": {
+      "file": "SetMultipleLabelOffsetsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "newOffsets",
+          "type": "Map<string, LabelOffset>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetNewConductorEndpointsCommand": {
+      "file": "SetNewConductorEndpointsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "endpoints",
+          "type": "{ startEndpoint?: ConductorEndpoint; endEndpoint?: ConductorEndpoint; }",
+          "required": true
+        }
+      ]
+    },
+    "SetNodePigtailLeadsCommand": {
+      "file": "SetNodePigtailLeadsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "leadUpdates",
+          "type": "Map<string, PinLead | undefined>",
+          "required": true
+        }
+      ]
+    },
+    "SetNodesSizeCommand": {
+      "file": "SetNodesSizeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "nodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "newSize",
+          "type": "Size",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "SetPreviewBoundingBoxCommand": {
+      "file": "SetPreviewBoundingBoxCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "oldBounds",
+          "type": "PreviewBoundsData",
+          "required": true
+        },
+        {
+          "name": "newBounds",
+          "type": "PreviewBoundsData",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetWirePnCommand": {
+      "file": "SetWirePnCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "wirePart",
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }",
+          "required": true
+        }
+      ]
+    },
+    "SimpleAddCommand": {
+      "file": "GenericPlanCommands",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "addFn",
+          "type": "(entity: T) => void",
+          "required": true
+        },
+        {
+          "name": "removeFn",
+          "type": "(id: string) => void",
+          "required": true
+        },
+        {
+          "name": "entity",
+          "type": "T",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "commandIdPrefix",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "SimpleRemoveCommand": {
+      "file": "GenericPlanCommands",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "getFn",
+          "type": "(id: string) => T | undefined",
+          "required": true
+        },
+        {
+          "name": "addFn",
+          "type": "(entity: T) => void",
+          "required": true
+        },
+        {
+          "name": "removeFn",
+          "type": "(id: string) => void",
+          "required": true
+        },
+        {
+          "name": "entityId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "commandIdPrefix",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "SimpleSetWaypointCommand": {
+      "file": "SimpleSetWaypointCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "connectionKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "ConnectionEnd",
+          "required": true
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldWaypoint",
+          "type": "WireAnchor | null",
+          "required": true
+        },
+        {
+          "name": "newWaypoint",
+          "type": "WireAnchor",
+          "required": true
+        },
+        {
+          "name": "hadRoutingBefore",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "workingHarnessStore",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    "SimpleUpdateCommand": {
+      "file": "GenericPlanCommands",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "updateFn",
+          "type": "(id: string, updates: Partial<T>) => void",
+          "required": true
+        },
+        {
+          "name": "getFn",
+          "type": "() => T | undefined",
+          "required": true
+        },
+        {
+          "name": "entityId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<T>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "commandIdPrefix",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "SplitLinkAtBranchPointCommand": {
+      "file": "SplitLinkAtBranchPointCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "SvgCommand": {
+      "file": "SvgCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "SvgCompositeCommand": {
+      "file": "SvgCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "commands",
+          "type": "SvgCommand[]",
+          "required": true
+        }
+      ]
+    },
+    "SwapCableCommand": {
+      "file": "SwapCableCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "swapData",
+          "type": "SwapPartData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SwapConnectorCommand": {
+      "file": "SwapConnectorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "swapData",
+          "type": "SwapPartData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SwapPinCommand": {
+      "file": "SwapPinCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "swapData",
+          "type": "SwapPinData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SwapWireCommand": {
+      "file": "SwapWireCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        },
+        {
+          "name": "swapData",
+          "type": "SwapPartData",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SyncCableCoresCommand": {
+      "file": "SyncCableCoresCommand",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "planStore",
+          "type": "PlanStore",
+          "required": true
+        },
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "bomEntry",
+          "type": "BomEntry",
+          "required": true
+        }
+      ]
+    },
+    "SyncCommand": {
+      "file": "SyncCommand",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "projectStore",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "selectedDiffs",
+          "type": "SyncDiff[]",
+          "required": true
+        },
+        {
+          "name": "direction",
+          "type": "SyncDirection",
+          "required": true
+        },
+        {
+          "name": "structuralDiffs",
+          "type": "StructuralDiff[]",
+          "required": false
+        }
+      ]
+    },
+    "ToggleVisibilityCommand": {
+      "file": "ToggleVisibilityCommand",
+      "domain": "svg-editor",
+      "stores": [],
+      "params": [
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldVisible",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "newVisible",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'mate' | 'wire'",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "UnlinkConductorFromWireGroupCommand": {
+      "file": "UnlinkConductorFromWireGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "wireGroupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBezierAnchorCommand": {
+      "file": "UpdateBezierPathCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "assemblyElementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "edgeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "anchorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<BezierAnchorPoint>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBezierPathCommand": {
+      "file": "UpdateBezierPathCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "assemblyElementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "edgeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPath",
+          "type": "EdgeBezierPath",
+          "required": true
+        },
+        {
+          "name": "oldPath",
+          "type": "EdgeBezierPath",
+          "required": false
+        }
+      ]
+    },
+    "UpdateBomEntryCommand": {
+      "file": "UpdateBomEntryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "bomEntryId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<Omit<BomEntry, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBomItemCommand": {
+      "file": "UpdateBomItemCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "instanceId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<ExpandedBomItem>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBranchPointPartCommand": {
+      "file": "UpdateBranchPointPartCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "partId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<BranchPointPart, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBranchPointRoutingCommand": {
+      "file": "UpdateBranchPointRoutingCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newRouting",
+          "type": "BranchPointRouting | undefined",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBundleAccessoryCommand": {
+      "file": "UpdateBundleAccessoryCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "accessoryId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldState",
+          "type": "Partial<BundleAccessory>",
+          "required": true
+        },
+        {
+          "name": "newState",
+          "type": "Partial<BundleAccessory>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBundleLabelCommand": {
+      "file": "UpdateBundleLabelCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "labelId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<BundleLabel>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBundleLengthCommand": {
+      "file": "UpdateBundleLengthCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "bundleKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLength",
+          "type": "number | undefined",
+          "required": true
+        },
+        {
+          "name": "newLength",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateBundlePropertiesCommand": {
+      "file": "UpdateBundlePropertiesCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "bundleKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "BundlePropertiesUpdates",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateCableCommand": {
+      "file": "UpdateCableCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanCable, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateCableLengthCommand": {
+      "file": "UpdateCableLengthCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "cableId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLength",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newLength",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateConductorSpliceCommand": {
+      "file": "UpdateConductorSpliceCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "spliceId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<ConductorSplice, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateCustomDesignatorCommand": {
+      "file": "UpdateCustomDesignatorCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "designatorChanges",
+          "type": "Map<string, string | undefined>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateDeviceGroupCommand": {
+      "file": "UpdateDeviceGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "DeviceGroupUpdates",
+          "required": true
+        }
+      ]
+    },
+    "UpdateDrawingElementCommand": {
+      "file": "UpdateDrawingElementCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "elementId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<DrawingElement>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateDrawingSheetCommand": {
+      "file": "UpdateDrawingSheetCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "sheetId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<DrawingSheet>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateLinkAccessoryCommand": {
+      "file": "UpdateLinkAccessoryCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "accessoryId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanLinkAccessory, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateLinkCommand": {
+      "file": "UpdateLinkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "LinkUpdates",
+          "required": true
+        }
+      ]
+    },
+    "UpdateLinkPathStyleCommand": {
+      "file": "UpdateLinkPathStyleCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "PathStyleUpdate",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
+    "UpdateMatePinMappingCommand": {
+      "file": "UpdateMatePinMappingCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "mateId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "mappingIndex",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'pin1' | 'pin2'",
+          "required": true
+        },
+        {
+          "name": "newPinId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "UpdateNetCommand": {
+      "file": "UpdateNetCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "netName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<PlanNet>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateNewConductorCommand": {
+      "file": "UpdateNewConductorCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanConductor, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateNodeBridgedPositionsCommand": {
+      "file": "UpdateNodeBridgedPositionsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newBridgedPositions",
+          "type": "(number | string)[][] | undefined",
+          "required": true
+        }
+      ]
+    },
+    "UpdateNodeCommand": {
+      "file": "UpdateNodeCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "NodeUpdates",
+          "required": true
+        }
+      ]
+    },
+    "UpdateNodePinsCommand": {
+      "file": "UpdateNodePinsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newPins",
+          "type": "ComponentPin[] | undefined",
+          "required": true
+        }
+      ]
+    },
+    "UpdatePageCommand": {
+      "file": "PageCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<PlanPage>",
+          "required": true
+        }
+      ]
+    },
+    "UpdatePdfPageCommand": {
+      "file": "UpdatePdfPageCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<PdfPageSpec>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        }
+      ]
+    },
+    "UpdateSignalCommand": {
+      "file": "UpdateSignalCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "signalId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<PlanSignalDefinition>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateSignalLabelCommand": {
+      "file": "UpdateSignalLabelCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "wireKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLabel",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newLabel",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        },
+        {
+          "name": "updateSignalLabelFn",
+          "type": "(wireKey: string, newLabel: string) => void",
+          "required": true
+        }
+      ]
+    },
+    "UpdateSignalLabelsCommand": {
+      "file": "UpdateSignalLabelsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "wireKey",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLabelEnd1",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "oldLabelEnd2",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "newLabelEnd1",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "newLabelEnd2",
+          "type": "string | undefined",
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "LabelUpdateMode",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        },
+        {
+          "name": "updateSignalLabelsFunction",
+          "type": "( wireKey: string, label_end1?: string, label_end2?: string, mode?: LabelUpdateMode ) => void",
+          "required": false
+        }
+      ]
+    },
+    "UpdateStrippingScheduleCommand": {
+      "file": "UpdateStrippingScheduleCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "newEntries",
+          "type": "Map<string, StrippingScheduleEntry>",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "StrippingScheduleStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdateSubassemblyInstanceCommand": {
+      "file": "SubassemblyInstanceCommands",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "instanceId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newValues",
+          "type": "Partial<SubassemblyInstance>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateTwistedPairCommand": {
+      "file": "UpdateTwistedPairCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "wires",
+          "type": "WirePairData | WirePairData[]",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "UpdateVisualGroupCommand": {
+      "file": "UpdateVisualGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<VisualGroup, 'id'>>",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "UpdateWireGroupCommand": {
+      "file": "UpdateWireGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "wireGroupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanWireGroup, 'id'>>",
+          "required": true
+        }
+      ]
+    },
+    "UpdateWireLengthCommand": {
+      "file": "UpdateWireLengthCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "wireId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldLength",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newLength",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "WorkingHarnessStore",
+          "required": true
+        }
+      ]
+    }
+  }
+}
