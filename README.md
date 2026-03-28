@@ -33,7 +33,16 @@ Then point your MCP config to the built file:
 
 **Requirements:**
 - Node.js 18+
-- A Splice CAD account with an API key (generate in Settings > API Key)
+- A Splice CAD account with an API key (generate in Account > API Key)
+
+## Quick Install
+
+**Claude Code** (one command):
+```bash
+claude mcp add splice-cad -e SPLICE_API_URL=https://splice-cad.com -e SPLICE_API_KEY=your-key -- npx @splice-cad/mcp
+```
+
+For other tools, see the setup sections below.
 
 ## Setup
 
@@ -134,7 +143,7 @@ codex --mcp splice-cad="npx @splice-cad/mcp"
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `SPLICE_API_URL` | Yes | Splice backend URL |
-| `SPLICE_API_KEY` | Yes | API key (Settings > API Key in Splice) |
+| `SPLICE_API_KEY` | Yes | API key (Account > API Key in Splice) |
 | `SPLICE_BRIDGE_PORT` | No | WebSocket bridge port (default: `9876`) |
 | `SPLICE_BRIDGE_SECRET` | No | Shared secret for WS auth (auto-generated) |
 
@@ -280,7 +289,7 @@ These communicate **entirely on your local machine**:
 Your Splice API key authenticates all REST API calls. It is:
 - Stored only in your MCP config file (never sent to the AI agent or logged)
 - Scoped to your user account — can only access your own projects and harnesses
-- Revocable at any time from Splice Settings > API Key
+- Revocable at any time from Splice Account > API Key
 - Rate-limited by your subscription tier (weekly request quota)
 
 **Never commit your API key to git.** Use environment variables or a local config file.

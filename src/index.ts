@@ -22,7 +22,7 @@ if (!SPLICE_API_URL || !SPLICE_API_KEY) {
   console.error(
     'Missing required environment variables:\n' +
     '  SPLICE_API_URL - Splice backend URL (e.g. https://splice-cad.com)\n' +
-    '  SPLICE_API_KEY - Your Splice API key (generate in Settings > API Key)\n',
+    '  SPLICE_API_KEY - Your Splice API key (generate in Account > API Key)\n',
   );
   process.exit(1);
 }
