@@ -5,18 +5,34 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "splice-mcp": "dist/index.js"
+    "splice-cad-mcp": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "scripts": {
     "generate": "tsx scripts/generate-schema.ts && tsx scripts/generate-commands.ts",
     "build": "tsup",
     "build:full": "npm run generate && tsup",
+    "prepublishOnly": "npm run build",
     "dev": "tsup --watch",
     "start": "node dist/index.js",
     "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/splice-cad/splice-cad-mcp.git"
+  },
+  "homepage": "https://splice-cad.com",
+  "bugs": {
+    "url": "https://github.com/splice-cad/splice-cad-mcp/issues"
+  },
+  "license": "MIT",
   "keywords": [
     "mcp",
     "model-context-protocol",
