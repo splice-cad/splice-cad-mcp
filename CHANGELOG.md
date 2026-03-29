@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 (2026-03-29)
+
+### Context Prompts
+
+Added 3 context-setting prompts that establish the agent's operating mode, available tools, and guardrails:
+
+- `plan-live` — Plan canvas via WebSocket bridge (use `execute_commands`/`get_live_state`, don't use `save_plan`)
+- `component-creator-live` — Component Creator via WebSocket bridge (use `setComponentState`/`getComponentState`, don't use `execute_command`)
+- `api-mode` — REST API only, no browser needed (use `save_plan`/`get_plan`, don't use bridge tools)
+
+### Updated Task Prompts
+
+All 5 existing task prompts now declare their operating mode upfront so the agent has correct context even when jumping straight into a task.
+
 ## 0.1.0 (2026-03-28)
 
 Initial release.

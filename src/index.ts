@@ -31,8 +31,8 @@ if (!SPLICE_API_URL || !SPLICE_API_KEY) {
 
 const server = new McpServer({
   name: 'splice-cad',
-  version: '0.1.0',
-  description: 'Splice cable harness configurator — search parts, build plans, generate assemblies via AI agents.',
+  version: '0.2.0',
+  description: 'MCP server for Splice CAD — search parts, build harness plans, create components with rich specs, and generate manufacturing documentation.',
 });
 
 const client = new SpliceApiClient(SPLICE_API_URL, SPLICE_API_KEY);

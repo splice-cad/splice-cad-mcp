@@ -149,15 +149,27 @@ codex --mcp splice-cad="npx @splice-cad/mcp"
 
 ## Prompts
 
-Pre-built workflows that guide the agent step-by-step:
+### Context Prompts
 
-| Prompt | Description |
-|--------|-------------|
-| `build-harness` | Build a complete cable harness from a description or datasheet |
-| `create-component` | Create a part with specs, image, pin labels from an MPN or datasheet |
-| `review-live-plan` | Connect via WebSocket to the open browser tab, read live plan state, suggest improvements |
-| `cleanup-layout` | Read component positions and reorganize for better layout |
-| `import-from-spreadsheet` | Build a harness from a CSV/Excel wiring schedule |
+Set the agent's operating mode — which tools to use, which to avoid, and the correct workflow:
+
+| Prompt | Mode | Description |
+|--------|------|-------------|
+| `plan-live` | WebSocket | Work on a plan open in the browser — live canvas updates with undo/redo |
+| `component-creator-live` | WebSocket | Work in the Component Creator — update form, specs, SVG, and pins in real-time |
+| `api-mode` | REST API | No browser needed — create projects, build plans, search parts, manage harnesses |
+
+### Task Prompts
+
+Step-by-step workflows that include their operating context:
+
+| Prompt | Mode | Description |
+|--------|------|-------------|
+| `build-harness` | API | Build a complete cable harness from a description or datasheet |
+| `create-component` | API | Create a part with specs, image, pin labels from an MPN or datasheet |
+| `review-live-plan` | Live | Connect via WebSocket, read live plan state, suggest improvements |
+| `cleanup-layout` | Live | Read component positions and reorganize for better layout |
+| `import-from-spreadsheet` | API | Build a harness from a CSV/Excel wiring schedule |
 
 ## Tools (27)
 

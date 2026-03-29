@@ -1,7 +1,7 @@
 {
   "name": "@splice-cad/mcp",
-  "version": "0.1.0",
-  "description": "MCP server for Splice CAD cable assembly and wiring harness design tool — search parts, build plans, generate assemblies via AI agents",
+  "version": "0.2.0",
+  "description": "MCP server for Splice CAD — search parts, build harness plans, create components with rich specs, and generate manufacturing documentation",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
