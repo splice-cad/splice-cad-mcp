@@ -236,35 +236,34 @@ See **[EXAMPLES.md](EXAMPLES.md)** for detailed walkthroughs including:
 
 There are two communication paths — one to the Splice cloud, one entirely local:
 
+**Single agent (default — embedded bridge):**
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   YOUR MACHINE                          │
-│                                                         │
-│  ┌──────────────┐    stdio     ┌──────────────────┐     │
-│  │  AI Agent    │◄────────────►│  MCP Server      │     │
-│  │  (Claude,    │              │  (splice-cad)    │     │
-│  │   Cursor,    │              │                  │     │
-│  │   ChatGPT)   │              │  ┌────────────┐  │     │
-│  └──────────────┘              │  │ WS Server  │  │     │
-│                                │  │ :9876      │  │     │
-│                                │  └─────┬──────┘  │     │
-│                                └────────┼─────────┘     │
-│                                         │ WebSocket     │
-│                                         │ (localhost)   │
-│                                ┌────────▼─────────┐     │
-│                                │  Splice Browser  │     │
-│                                │  Tab             │     │
-│                                │  (canvas + stores)│    │
-│                                └──────────────────┘     │
-└─────────────────────────────────────────────────────────┘
-                         │
-                         │ HTTPS (API key auth)
-                         ▼
-              ┌──────────────────┐
-              │  Splice Cloud    │
-              │  splice-cad.com  │
-              │  (REST API)      │
-              └──────────────────┘
+  ┌──────────────┐    stdio     ┌──────────────────┐
+  │  AI Agent    │◄────────────►│  MCP Server      │
+  │  (Claude,    │              │  (splice-cad)    │
+  │   Cursor,    │              │                  │
+  │   ChatGPT)   │              │  ┌────────────┐  │
+  └──────────────┘              │  │ WS Bridge  │  │
+                                │  │ :9876      │  │
+                                │  └─────┬──────┘  │
+                                └────────┼─────────┘
+                                         │ WebSocket (localhost)
+                                ┌────────▼─────────┐
+                                │  Splice Browser  │──── HTTPS ───► splice-cad.com
+                                │  Tab             │
+                                └──────────────────┘
+```
+
+**Multi-agent (standalone splice-bridge):**
+```
+  Agent A          Agent B
+     │                │
+  MCP Server A    MCP Server B     (both connect as WS clients)
+     │                │
+     └──── splice-bridge ────┘     ← Rust binary on :9876
+                │
+         ┌──────┴──────┐
+     Tab 1 (proj A)  Tab 2 (proj B)
 ```
 
 ### REST Tools (save_plan, search_connectors, etc.)
@@ -282,6 +281,27 @@ These communicate **entirely on your local machine**:
 5. Canvas updates instantly, actions appear in undo history
 
 **No data leaves your machine for live bridge commands.** The WebSocket connection is `localhost` only — it never touches the internet. The Splice CAD cloud is not involved in live command execution.
+
+### Multi-Agent Mode (splice-bridge)
+
+For running multiple agents on different projects simultaneously, use the standalone [splice-bridge](https://github.com/splice-cad/splice-bridge) router:
+
+```
+  Agent A (Claude Code)          Agent B (Cursor)
+       │                              │
+  MCP Server A                   MCP Server B
+       │                              │
+       └────────── splice-bridge ─────┘    ← standalone Rust binary
+                       │
+            ┌──────────┴──────────┐
+            │                     │
+       Browser Tab 1         Browser Tab 2
+       (project:abc)         (project:xyz)
+```
+
+The MCP server automatically detects if `splice-bridge` is already running on the bridge port. If so, it connects as a WebSocket **client** instead of starting its own embedded server. No configuration change needed — just start `splice-bridge` before launching your agents.
+
+See the [splice-bridge README](https://github.com/splice-cad/splice-bridge) for installation and usage.
 
 ### What goes where
 

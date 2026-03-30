@@ -1,11 +1,8 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
+import type { Bridge, CommandResult } from './types.js';
 
-export interface CommandResult {
-  success: boolean;
-  error?: string;
-  summary?: Record<string, unknown>;
-}
+export type { CommandResult };
 
 interface PendingRequest {
   resolve: (value: unknown) => void;
@@ -24,7 +21,7 @@ interface ConnectedClient {
  * Supports multiple tabs — each registers with a namespace (project/harness ID).
  * MCP tools target a specific namespace, or the default (most recently connected) client.
  */
-export class BridgeServer {
+export class BridgeServer implements Bridge {
   private wss: WebSocketServer | null = null;
   private clients = new Map<string, ConnectedClient>();  // namespace → client
   private defaultNamespace: string | null = null;

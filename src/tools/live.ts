@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { BridgeServer } from '../bridge/ws-server.js';
+import type { Bridge } from '../bridge/types.js';
 
 function errorResult(err: unknown) {
   return {
@@ -14,7 +14,7 @@ function errorResult(err: unknown) {
   };
 }
 
-export function registerLiveTools(server: McpServer, getBridge: () => BridgeServer) {
+export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
   server.tool(
     'is_bridge_connected',
     'Check which browser tabs are connected via the WebSocket bridge. Returns connected namespaces (project/harness IDs). When connected, you can use execute_command for live canvas updates with undo/redo.',

@@ -1,6 +1,6 @@
 {
   "name": "@splice-cad/mcp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "MCP server for Splice CAD — search parts, build harness plans, create components with rich specs, and generate manufacturing documentation",
   "type": "module",
   "main": "dist/index.js",
@@ -9,11 +9,14 @@
   },
   "files": [
     "dist",
+    "bin",
+    "scripts/postinstall.js",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
+    "postinstall": "node scripts/postinstall.js",
     "generate": "tsx scripts/generate-schema.ts && tsx scripts/generate-commands.ts",
     "build": "tsup",
     "build:full": "npm run generate && tsup",

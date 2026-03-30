@@ -10,7 +10,9 @@ import { registerSchemaResource } from './resources/schema.js';
 import { registerHarnessSchemaResource } from './resources/harness-schema.js';
 import { registerExamplesResource } from './resources/examples.js';
 import { registerLiveTools } from './tools/live.js';
+import type { Bridge } from './bridge/types.js';
 import { BridgeServer } from './bridge/ws-server.js';
+import { BridgeClient } from './bridge/ws-client.js';
 import { registerPrompts } from './prompts.js';
 
 // ── Configuration ───────────────────────────────────────────────────────
@@ -49,7 +51,7 @@ registerHarnessTools(server, getClient);
 
 const bridgePort = parseInt(process.env.SPLICE_BRIDGE_PORT || '9876', 10);
 const bridgeSecret = process.env.SPLICE_BRIDGE_SECRET;  // Optional — auto-generated if not set
-const bridge = new BridgeServer(bridgePort, bridgeSecret);
+let bridge: Bridge;
 const getBridge = () => bridge;
 
 // Register live tools (execute_command, undo, redo, etc.)
@@ -66,8 +68,24 @@ registerPrompts(server);
 // ── Start ───────────────────────────────────────────────────────────────
 
 async function main() {
-  // Start WebSocket bridge server for live canvas updates
-  await bridge.start();
+  // Try to start embedded WebSocket bridge server.
+  // If port is already in use (standalone splice-bridge running), connect as a client instead.
+  const embeddedBridge = new BridgeServer(bridgePort, bridgeSecret);
+  try {
+    await embeddedBridge.start();
+    bridge = embeddedBridge;
+    console.error('[bridge] Started embedded bridge server');
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : String(err);
+    if (errMsg.includes('EADDRINUSE') || errMsg.includes('address already in use')) {
+      console.error(`[bridge] Port ${bridgePort} in use — connecting to standalone splice-bridge as client`);
+      const clientBridge = new BridgeClient(bridgePort, bridgeSecret);
+      await clientBridge.start();
+      bridge = clientBridge;
+    } else {
+      throw err;
+    }
+  }
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
