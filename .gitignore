@@ -1,4 +1,5 @@
 node_modules/
 dist/
+bin/
 *.tsbuildinfo
 # generated/ is committed — these are the bridge between private frontend and public MCP
