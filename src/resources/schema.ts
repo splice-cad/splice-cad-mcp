@@ -265,6 +265,13 @@ Designators are auto-generated from the node category. Use these prefixes in the
 
 Every component node has a **mating behavior** determined by its \`shape\` and \`category\`. This controls what it can mate with.
 
+> **"Termination" appears in three independent contexts — do not confuse them:**
+> 1. **Termination node** — a component with \`shape: "ferrule"\`, \`"ring"\`, or \`"quickdisconnect"\` (or \`category: "flying_lead"\`). Has mating behavior \`"termination"\` — it connects to a terminal point via a MateRelationship.
+> 2. **Conductor endpoint contact** — \`startTermination\` / \`endTermination\` on a PlanConductor. This is a BOM entry (\`type: "contact"\`) specifying the crimp pin or ferrule **part** used to attach the wire at that end. Independent of the node type at that endpoint.
+> 3. **Pin-level termination** — \`pin.termination\` on a ComponentPin, for specifying contact parts on disconnected pins.
+>
+> A conductor can have an endpoint contact (type 2) at any node — connector, terminal point, or termination node. These three concepts are orthogonal.
+
 #### Three Mating Behaviors
 
 | Behavior | Default inference | What it does |
@@ -284,6 +291,23 @@ The mating behavior is **inferred** from shape and category by default, but can 
 \`\`\`
 
 This makes a rectangular-shaped component behave as a terminal point regardless of its shape. Valid values: \`"connector"\`, \`"terminal_point"\`, \`"termination"\`. Use this when the default inference doesn't match the real-world component.
+
+#### How Category and Shape Interact
+
+Mating behavior is determined by **shape first**, then category:
+- \`shape: "terminal_block"\` → terminal_point behavior
+- \`shape: "ferrule"\` / \`"ring"\` / \`"quickdisconnect"\` → termination behavior
+- \`category: "flying_lead"\` (with no termination shape) → termination behavior
+- **All other categories** (\`"fuse"\`, \`"relay"\`, \`"circuit_breaker"\`, \`"motor"\`, \`"pcb"\`, etc.) → **connector behavior**, regardless of category
+
+For terminal blocks, set **both** \`shape: "terminal_block"\` AND \`category: "terminal_point"\`. The shape drives mating behavior; the category controls the designator prefix and icon.
+
+Categories primarily affect:
+- **Designator prefix** — F for fuse, K for relay, M for motor, etc. (see table above)
+- **Icon rendering** — each category has a distinct visual on the canvas
+- **Part categorization** — helps organize the BOM
+
+If the user mentions a component type (fuse, relay, breaker, motor, etc.), always set the matching category. If unsure, omit it — the node defaults to connector behavior with an X prefix.
 
 #### Mating Rules
 
@@ -312,17 +336,37 @@ This makes a rectangular-shaped component behave as a terminal point regardless 
 | Relay | Connector node | — | \`"relay"\` |
 | Circuit breaker | Connector node | — | \`"circuit_breaker"\` |
 
-#### Contacts on Conductor Endpoints
+#### Terminal Point Wiring Pattern
 
-In addition to termination nodes, you can specify the **contact part** (crimp pin, ferrule, etc.) used where a wire meets a connector or terminal point. This is done via \`startTermination\` / \`endTermination\` on the conductor:
+**Conductors never terminate directly at a terminal_point node.** When wiring to a terminal block, always create an intermediary termination node (ferrule, ring terminal, or quick disconnect) between the conductor and the terminal block:
 
-\`\`\`json
-"endTermination": { "method": "crimp", "contactBomEntryId": "bom_ferrule_1" }
+\`\`\`
+[Connector] —— conductor on link —→ [Termination Node] ←— mate —→ [Terminal Block]
 \`\`\`
 
-The contact is a BOM entry with \`type: "contact"\`. This specifies the physical part used to attach the wire — separate from the termination node shape.
+- The conductor's endpoint connects to the **termination node**, not the terminal block
+- A \`MateRelationship\` connects the termination node to the terminal block with \`pinMappings\`
+- Each terminal block position that receives a wire gets its own termination node
+- The default termination shape is \`"ferrule"\`, but the user can choose \`"ring"\` or \`"quickdisconnect"\`
+- This is what the Splice UI generates automatically
 
-#### Example: ECU connector → terminal block (with termination node + contact parts)
+For terminal_block ↔ terminal_block connections, **both sides** need termination nodes:
+
+\`\`\`
+[TB-A] ←— mate —→ [Termination] —— conductor —→ [Termination] ←— mate —→ [TB-B]
+\`\`\`
+
+#### Contacts on Conductor Endpoints
+
+Separately from termination nodes, you can specify the **contact part** (crimp pin, ferrule, etc.) used where a wire meets a connector. This is done via \`startTermination\` / \`endTermination\` on the conductor:
+
+\`\`\`json
+"startTermination": { "method": "crimp", "contactBomEntryId": "bom_crimp_1" }
+\`\`\`
+
+The contact is a BOM entry with \`type: "contact"\`. This specifies the physical part used to attach the wire — separate from termination nodes. For example, a conductor between two connectors might have crimp contacts at both ends without any termination nodes involved.
+
+#### Example: ECU connector → terminal block (ferrule intermediary pattern)
 
 \`\`\`json
 {
@@ -333,19 +377,27 @@ The contact is a BOM entry with \`type: "contact"\`. This specifies the physical
       "shape": "rectangular",
       "pins": [{ "id": "pin_1", "label": "1", "function": "12V Power" }]
     },
+    "comp_fe": {
+      "id": "comp_fe", "type": "component", "label": "FE1", "name": "Ferrule",
+      "shape": "ferrule",
+      "position": { "x": 400, "y": 300 },
+      "size": { "width": 40, "height": 10 },
+      "pins": [{ "id": "pin_fe1", "label": "1" }],
+      "bomEntryId": "bom_ferrule_node"
+    },
     "comp_tb": {
       "id": "comp_tb", "type": "component", "label": "TP1",
       "name": "Power Terminal Block",
       "category": "terminal_point",
       "shape": "terminal_block",
-      "position": { "x": 500, "y": 300 },
+      "position": { "x": 600, "y": 300 },
       "pins": [{ "id": "pin_tb1", "label": "1" }]
     }
   },
   "links": {
     "link_1": {
       "id": "link_1",
-      "sourceNodeId": "comp_ecu", "targetNodeId": "comp_tb",
+      "sourceNodeId": "comp_ecu", "targetNodeId": "comp_fe",
       "length_mm": 300
     }
   },
@@ -354,25 +406,38 @@ The contact is a BOM entry with \`type: "contact"\`. This specifies the physical
       "id": "cond_1", "netName": "net_pwr",
       "gauge": "16 AWG", "color": "#FF0000",
       "startEndpoint": { "nodeId": "comp_ecu", "pinId": "pin_1" },
-      "endEndpoint": { "nodeId": "comp_tb", "pinId": "pin_tb1" },
+      "endEndpoint": { "nodeId": "comp_fe", "pinId": "pin_fe1" },
       "linkPath": ["link_1"],
-      "startTermination": { "method": "crimp", "contactBomEntryId": "bom_crimp_1" },
-      "endTermination": { "method": "crimp", "contactBomEntryId": "bom_ferrule_1" }
+      "startTermination": { "method": "crimp", "contactBomEntryId": "bom_crimp_1" }
     }
   },
+  "mates": [
+    {
+      "id": "mate_1", "connector1Id": "comp_fe", "connector2Id": "comp_tb",
+      "pinMappings": [{ "pin1Id": "pin_fe1", "pin2Id": "pin_tb1" }]
+    }
+  ],
   "bom": [
-    { "id": "bom_ferrule_1", "mpn": "AI 1.5-8 RD", "manufacturer": "Phoenix Contact",
-      "type": "contact", "description": "Ferrule 16 AWG Red" },
+    { "id": "bom_ferrule_node", "mpn": "AI 1.5-8 RD", "manufacturer": "Phoenix Contact",
+      "type": "connector", "description": "Ferrule 16 AWG Red",
+      "spec": { "positions": 1, "shape": "ferrule" } },
     { "id": "bom_crimp_1", "mpn": "0460-215-1631", "manufacturer": "Deutsch",
       "type": "contact", "description": "Size 16 Crimp Contact" }
   ],
   "nets": {
     "net_pwr": { "name": "net_pwr", "displayName": "12V Power" }
   },
-  "wireGroups": {}, "cables": {}, "signals": {}, "mates": [],
+  "wireGroups": {}, "cables": {}, "signals": {},
   "deviceGroups": [], "conductorSplices": {}, "assemblyRefs": {}
 }
 \`\`\`
+
+**Key points:**
+- The conductor terminates at the **ferrule node** (\`comp_fe\`), NOT at the terminal block
+- The \`MateRelationship\` connects the ferrule to the terminal block with \`pinMappings\`
+- The ferrule node has its own BOM entry (\`type: "connector"\`) — it's a physical component
+- The conductor's \`startTermination\` has a crimp contact BOM entry (\`type: "contact"\`) — this is the contact part at the ECU end, independent of the ferrule node
+- No link exists between the ferrule and terminal block — they connect via the mate only
 
 ## PlanLink (bundle)
 
@@ -685,7 +750,7 @@ A MateRelationship is only valid between nodes whose **mating behaviors** are co
 6. **All referenced IDs must exist** — node IDs in links, pin IDs in conductors, link IDs in linkPath, etc.
 7. **Assembly locks** — nodes and links with \`assemblyRefId\` set belong to an off-the-shelf assembly and cannot be structurally modified. Do not add/remove conductors on locked links or modify locked nodes.
 8. **Pages are optional** — if \`pages\` is empty or omitted, Splice auto-creates a default Page 1 on load. Page assignments (\`nodePageAssignments\`, \`linkPageAssignments\`) are optional — all nodes/links appear on all pages by default.
-9. **Terminal point wiring pattern** — when wiring a connector to a terminal point, the recommended pattern is to create a ferrule intermediary node (\`shape: "ferrule"\`, size 40x10) between them. The connector links to the ferrule, and the ferrule mates with the terminal point via a \`MateRelationship\`. This matches what the Splice UI does automatically.
+9. **Terminal point wiring pattern** — conductors never terminate directly at a terminal_point node. Always create an intermediary termination node (\`shape: "ferrule"\`, \`"ring"\`, or \`"quickdisconnect"\`, size 40x10) between the conductor and the terminal block. The conductor links to the termination node, and the termination node mates with the terminal block via a \`MateRelationship\`. See "Terminal Point Wiring Pattern" above for details and examples.
 10. **BOM and node must stay in sync** — when setting \`bomEntryId\` on a node, also set the node's \`shape\`, \`category\`, pin count, and pin labels to match the BOM entry's spec. See "BOM Assignment Behavior" above.
 `;
 

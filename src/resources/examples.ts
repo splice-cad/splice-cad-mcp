@@ -6,7 +6,7 @@ Copy-paste-ready patterns extracted from real production harnesses. Each example
 
 ## Pattern 1: Power Supply → Circuit Breaker → Terminal Block
 
-A 24V power supply feeds a circuit breaker, which distributes power to a bridged terminal block.
+A 24V power supply feeds a circuit breaker, which distributes power to a bridged terminal block. The terminal block connection uses a ferrule intermediary node — conductors never connect directly to a terminal_point node.
 
 \`\`\`json
 {
@@ -35,12 +35,21 @@ A 24V power supply feeds a circuit breaker, which distributes power to a bridged
       ],
       "bomEntryId": "bom_cb"
     },
+    "comp_fe_outp": {
+      "id": "comp_fe_outp", "type": "component", "label": "FE1",
+      "name": "Ferrule",
+      "shape": "ferrule",
+      "position": { "x": 650, "y": 300 },
+      "size": { "width": 40, "height": 10 },
+      "pins": [{ "id": "pin_fe_outp", "label": "1" }],
+      "bomEntryId": "bom_ferrule"
+    },
     "comp_tb": {
       "id": "comp_tb", "type": "component", "label": "X1",
       "name": "24V Distribution Bus",
       "category": "terminal_point",
       "shape": "terminal_block",
-      "position": { "x": 700, "y": 300 },
+      "position": { "x": 800, "y": 300 },
       "pins": [
         { "id": "pin_tb_1", "label": "1" },
         { "id": "pin_tb_2", "label": "2" },
@@ -57,9 +66,9 @@ A 24V power supply feeds a circuit breaker, which distributes power to a bridged
       "sourceNodeId": "comp_ps", "targetNodeId": "comp_cb",
       "length_mm": 200
     },
-    "link_cb_tb": {
-      "id": "link_cb_tb",
-      "sourceNodeId": "comp_cb", "targetNodeId": "comp_tb",
+    "link_cb_fe": {
+      "id": "link_cb_fe",
+      "sourceNodeId": "comp_cb", "targetNodeId": "comp_fe_outp",
       "length_mm": 300
     }
   },
@@ -84,11 +93,17 @@ A 24V power supply feeds a circuit breaker, which distributes power to a bridged
       "id": "cond_vp_out", "netName": "net_24v_protected",
       "gauge": "20 AWG", "color": "#FF0000",
       "startEndpoint": { "nodeId": "comp_cb", "pinId": "pin_cb_outp" },
-      "endEndpoint": { "nodeId": "comp_tb", "pinId": "pin_tb_1" },
-      "linkPath": ["link_cb_tb"],
+      "endEndpoint": { "nodeId": "comp_fe_outp", "pinId": "pin_fe_outp" },
+      "linkPath": ["link_cb_fe"],
       "bomEntryId": "bom_wire_red"
     }
   },
+  "mates": [
+    {
+      "id": "mate_fe_tb", "connector1Id": "comp_fe_outp", "connector2Id": "comp_tb",
+      "pinMappings": [{ "pin1Id": "pin_fe_outp", "pin2Id": "pin_tb_1" }]
+    }
+  ],
   "nets": {
     "net_24v": { "name": "net_24v", "displayName": "24V" },
     "net_gnd": { "name": "net_gnd", "displayName": "GND" },
@@ -106,9 +121,14 @@ A 24V power supply feeds a circuit breaker, which distributes power to a bridged
       "spec": { "category": "circuit_breaker", "positions": 4 }
     },
     {
+      "id": "bom_ferrule", "mpn": "AI 1.5-8 RD", "manufacturer": "Phoenix Contact",
+      "description": "Ferrule 20 AWG Red Insulated", "type": "connector",
+      "spec": { "positions": 1, "shape": "ferrule" }
+    },
+    {
       "id": "bom_tb", "mpn": "3273268", "manufacturer": "Phoenix Contact",
       "description": "PTFIX 6-pos Distribution Block Red", "type": "connector",
-      "spec": { "positions": 4, "shape": "terminal_block", "bridged_positions": [[1,2,3,4]] }
+      "spec": { "positions": 4, "shape": "terminal_block", "category": "terminal_point", "bridged_positions": [[1,2,3,4]] }
     },
     {
       "id": "bom_wire_red", "mpn": "20UL1015STRRED", "manufacturer": "Remington Industries",
@@ -121,7 +141,7 @@ A 24V power supply feeds a circuit breaker, which distributes power to a bridged
       "spec": { "gauge": "20 AWG", "color": "black" }
     }
   ],
-  "wireGroups": {}, "cables": {}, "signals": {}, "mates": [],
+  "wireGroups": {}, "cables": {}, "signals": {},
   "deviceGroups": [], "conductorSplices": {}, "assemblyRefs": {}
 }
 \`\`\`
@@ -489,9 +509,9 @@ A 9-pin D-Sub connector for an avionics device with labeled pins and signal assi
 - Wire group is scoped to a single link
 - Mate relationship maps only the connected pins (not all 9)
 
-## Pattern 5: Terminal Block with Ferrule Terminations
+## Pattern 5: Terminal Block with Ferrule Intermediary Nodes
 
-Wires terminated with ferrules connect to a terminal block. The ferrule is a contact on the conductor endpoint, the terminal block is a terminal_point node.
+A controller connects to a 2-position terminal block. Each terminal block position gets its own ferrule intermediary node — conductors terminate at the ferrule, and a MateRelationship connects the ferrule to the terminal block. Conductors never connect directly to a terminal_point node.
 
 \`\`\`json
 {
@@ -505,12 +525,30 @@ Wires terminated with ferrules connect to a terminal block. The ferrule is a con
         { "id": "pin_2", "label": "2", "function": "GND" }
       ]
     },
+    "comp_fe1": {
+      "id": "comp_fe1", "type": "component", "label": "FE1",
+      "name": "Ferrule",
+      "shape": "ferrule",
+      "position": { "x": 400, "y": 280 },
+      "size": { "width": 40, "height": 10 },
+      "pins": [{ "id": "pin_fe1", "label": "1" }],
+      "bomEntryId": "bom_ferrule"
+    },
+    "comp_fe2": {
+      "id": "comp_fe2", "type": "component", "label": "FE2",
+      "name": "Ferrule",
+      "shape": "ferrule",
+      "position": { "x": 400, "y": 320 },
+      "size": { "width": 40, "height": 10 },
+      "pins": [{ "id": "pin_fe2", "label": "1" }],
+      "bomEntryId": "bom_ferrule"
+    },
     "comp_tb": {
       "id": "comp_tb", "type": "component", "label": "X2",
       "name": "Field Terminal Block",
       "category": "terminal_point",
       "shape": "terminal_block",
-      "position": { "x": 500, "y": 300 },
+      "position": { "x": 600, "y": 300 },
       "pins": [
         { "id": "pin_tb1", "label": "1" },
         { "id": "pin_tb2", "label": "2" }
@@ -521,7 +559,12 @@ Wires terminated with ferrules connect to a terminal block. The ferrule is a con
   "links": {
     "link_1": {
       "id": "link_1",
-      "sourceNodeId": "comp_dev", "targetNodeId": "comp_tb",
+      "sourceNodeId": "comp_dev", "targetNodeId": "comp_fe1",
+      "length_mm": 400
+    },
+    "link_2": {
+      "id": "link_2",
+      "sourceNodeId": "comp_dev", "targetNodeId": "comp_fe2",
       "length_mm": 400
     }
   },
@@ -530,19 +573,27 @@ Wires terminated with ferrules connect to a terminal block. The ferrule is a con
       "id": "cond_1", "netName": "net_24v",
       "gauge": "18 AWG", "color": "#FF0000",
       "startEndpoint": { "nodeId": "comp_dev", "pinId": "pin_1" },
-      "endEndpoint": { "nodeId": "comp_tb", "pinId": "pin_tb1" },
-      "linkPath": ["link_1"],
-      "endTermination": { "method": "crimp", "contactBomEntryId": "bom_ferrule" }
+      "endEndpoint": { "nodeId": "comp_fe1", "pinId": "pin_fe1" },
+      "linkPath": ["link_1"]
     },
     "cond_2": {
       "id": "cond_2", "netName": "net_gnd",
       "gauge": "18 AWG", "color": "#000000",
       "startEndpoint": { "nodeId": "comp_dev", "pinId": "pin_2" },
-      "endEndpoint": { "nodeId": "comp_tb", "pinId": "pin_tb2" },
-      "linkPath": ["link_1"],
-      "endTermination": { "method": "crimp", "contactBomEntryId": "bom_ferrule" }
+      "endEndpoint": { "nodeId": "comp_fe2", "pinId": "pin_fe2" },
+      "linkPath": ["link_2"]
     }
   },
+  "mates": [
+    {
+      "id": "mate_1", "connector1Id": "comp_fe1", "connector2Id": "comp_tb",
+      "pinMappings": [{ "pin1Id": "pin_fe1", "pin2Id": "pin_tb1" }]
+    },
+    {
+      "id": "mate_2", "connector1Id": "comp_fe2", "connector2Id": "comp_tb",
+      "pinMappings": [{ "pin1Id": "pin_fe2", "pin2Id": "pin_tb2" }]
+    }
+  ],
   "nets": {
     "net_24v": { "name": "net_24v", "displayName": "24V" },
     "net_gnd": { "name": "net_gnd", "displayName": "GND" }
@@ -550,20 +601,24 @@ Wires terminated with ferrules connect to a terminal block. The ferrule is a con
   "bom": [
     { "id": "bom_tb", "mpn": "3273278", "manufacturer": "Phoenix Contact",
       "description": "PTFIX 2-pos Terminal Block", "type": "connector",
-      "spec": { "positions": 2, "shape": "terminal_block" } },
+      "spec": { "positions": 2, "shape": "terminal_block", "category": "terminal_point" } },
     { "id": "bom_ferrule", "mpn": "AI 1.5-8 RD", "manufacturer": "Phoenix Contact",
-      "description": "Ferrule 18 AWG Insulated Red", "type": "contact" }
+      "description": "Ferrule 18 AWG Insulated Red", "type": "connector",
+      "spec": { "positions": 1, "shape": "ferrule" } }
   ],
-  "wireGroups": {}, "cables": {}, "signals": {}, "mates": [],
+  "wireGroups": {}, "cables": {}, "signals": {},
   "deviceGroups": [], "conductorSplices": {}, "assemblyRefs": {}
 }
 \`\`\`
 
 **Key points:**
-- Terminal block uses \`category: "terminal_point"\` and \`shape: "terminal_block"\`
-- Ferrule is a \`type: "contact"\` BOM entry — NOT a node
-- Only the terminal block end has a termination (\`endTermination\`) — the controller end connects directly
-- The ferrule BOM entry is shared across multiple conductors (same part reused)
+- Terminal block uses \`category: "terminal_point"\` AND \`shape: "terminal_block"\` — both are required
+- Each terminal block position gets its **own ferrule node** (1 pin each) and its own link from the source
+- Conductors terminate at the ferrule nodes, NOT at the terminal block — no link exists between ferrule and TB
+- \`MateRelationship\` with \`pinMappings\` connects each ferrule to its terminal block position
+- Ferrule BOM entry is \`type: "connector"\` (it's a node/component), not \`type: "contact"\`
+- The ferrule BOM entry can be shared across multiple ferrule nodes (same part reused)
+- The user can choose \`"ring"\` or \`"quickdisconnect"\` shapes instead of \`"ferrule"\` depending on the real-world termination type
 `;
 
 export function registerExamplesResource(server: McpServer) {
