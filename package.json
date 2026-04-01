@@ -49,18 +49,18 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "1.28.0",
     "axios": "1.13.6",
-    "ws": "^8.20.0",
-    "zod": "^3.25.11"
+    "ws": "8.20.0",
+    "zod": "3.25.76"
   },
   "devDependencies": {
-    "@types/node": "^22.15.0",
-    "@types/ws": "^8.18.1",
-    "ts-json-schema-generator": "^2.9.0",
-    "tsup": "^8.5.0",
-    "tsx": "^4.21.0",
-    "typescript": "~5.5.3",
-    "vitest": "^3.2.4"
+    "@types/node": "22.19.15",
+    "@types/ws": "8.18.1",
+    "ts-json-schema-generator": "2.9.0",
+    "tsup": "8.5.1",
+    "tsx": "4.21.0",
+    "typescript": "5.5.4",
+    "vitest": "3.2.4"
   }
 }
