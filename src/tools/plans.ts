@@ -1,8 +1,34 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { SpliceApiClient } from '../api/client.js';
-import type { PlanData, PlanNode, PlanConductor } from '../types/plan.js';
+import type { PlanData, PlanNode, PlanConductor, MateRelationship } from '../types/plan.js';
 import { normalizeColorToHex, normalizeColorToName } from '../utils/colors.js';
+
+// ── Mating behavior (mirrors frontend shapeMatingConfig.ts) ────────────
+
+type MatingBehavior = 'connector' | 'terminal_point' | 'termination';
+
+const SHAPE_MATING: Record<string, MatingBehavior> = {
+  circular: 'connector',
+  rectangular: 'connector',
+  dsub: 'connector',
+  button: 'connector',
+  other: 'connector',
+  terminal_block: 'terminal_point',
+  ferrule: 'termination',
+  ring: 'termination',
+  quickdisconnect: 'termination',
+};
+
+function getNodeMating(node: PlanNode): MatingBehavior {
+  if ((node as any).matingBehavior) return (node as any).matingBehavior;
+  if (node.category === 'flying_lead') return 'termination';
+  return SHAPE_MATING[node.shape as string] ?? 'connector';
+}
+
+function makeId(prefix: string): string {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+}
 
 /**
  * Fix all conductor and BOM colors in a plan to use standard values.
@@ -41,6 +67,136 @@ function fixPlanColors(plan: PlanData): string[] {
       } else if (fixed !== raw) {
         fixes.push(`BOM ${bom.id} (${bom.mpn}): corrected spec.${field} "${raw}" → "${fixed}"`);
         (bom.spec as Record<string, unknown>)[field] = fixed;
+      }
+    }
+  }
+
+  return fixes;
+}
+
+/**
+ * Auto-fix conductors that terminate directly at terminal_point nodes.
+ * Inserts a ferrule intermediary node, reroutes the conductor, and creates
+ * a MateRelationship between the ferrule and the terminal block.
+ */
+function fixTerminalPointWiring(plan: PlanData): string[] {
+  const fixes: string[] = [];
+  const nodes = plan.nodes ?? {};
+  const links = plan.links ?? {};
+  const conductors = plan.conductors ?? {};
+
+  // Track ferrules already created for a given (linkId, tbNodeId, tbPinId)
+  // so multiple conductors to the same TB pin share one ferrule.
+  const ferruleCache = new Map<string, { ferruleId: string; pinId: string; linkId: string }>();
+
+  for (const cond of Object.values(conductors)) {
+    for (const side of ['startEndpoint', 'endEndpoint'] as const) {
+      const ep = cond[side];
+      if (!ep?.nodeId || !ep.pinId) continue;
+      const tbNode = nodes[ep.nodeId];
+      if (!tbNode) continue;
+      if (getNodeMating(tbNode) !== 'terminal_point') continue;
+
+      // This conductor endpoint touches a terminal_point — fix it.
+      // Find the link that connects to this TB node on this side.
+      const otherSide = side === 'startEndpoint' ? 'endEndpoint' : 'startEndpoint';
+      const otherEp = cond[otherSide];
+      if (!otherEp?.nodeId) continue;
+
+      // Find the link in linkPath whose source or target is the TB node
+      const tbLinkId = cond.linkPath?.find(lid => {
+        const l = links[lid];
+        return l && (l.sourceNodeId === tbNode.id || l.targetNodeId === tbNode.id);
+      });
+      if (!tbLinkId) continue;
+      const tbLink = links[tbLinkId];
+
+      const cacheKey = `${tbLinkId}:${tbNode.id}:${ep.pinId}`;
+      let ferrule = ferruleCache.get(cacheKey);
+
+      if (!ferrule) {
+        // Create ferrule node
+        const feNodeId = makeId('comp');
+        const fePinId = makeId('pin');
+        const feNode: PlanNode = {
+          id: feNodeId,
+          type: 'component' as any,
+          label: `FE${Object.values(nodes).filter(n => n.shape === 'ferrule').length + 1}`,
+          name: 'Ferrule',
+          shape: 'ferrule' as any,
+          position: {
+            x: tbNode.position.x - 60,
+            y: tbNode.position.y,
+          },
+          size: { width: 40, height: 10 },
+          pins: [{ id: fePinId, label: '1' }],
+        };
+        nodes[feNodeId] = feNode;
+
+        // Reroute the link: change the TB end to point at the ferrule
+        // But other conductors on this link may not go to the TB — create a new link instead.
+        const sourceNodeId = tbLink.sourceNodeId === tbNode.id
+          ? (otherEp.nodeId)   // link was TB → other, new link: other → ferrule
+          : tbLink.sourceNodeId; // link was other → TB, new link: source → ferrule
+        const newLinkId = makeId('link');
+        links[newLinkId] = {
+          id: newLinkId,
+          sourceNodeId: sourceNodeId,
+          targetNodeId: feNodeId,
+          length_mm: tbLink.length_mm,
+        } as any;
+
+        // Create mate relationship
+        const mateId = makeId('mate');
+        const mate: MateRelationship = {
+          id: mateId,
+          connector1Id: feNodeId,
+          connector2Id: tbNode.id,
+          pinMappings: [{ pin1Id: fePinId, pin2Id: ep.pinId }],
+        };
+        if (!plan.mates) plan.mates = [];
+        plan.mates.push(mate);
+
+        ferrule = { ferruleId: feNodeId, pinId: fePinId, linkId: newLinkId };
+        ferruleCache.set(cacheKey, ferrule);
+      }
+
+      // Reroute conductor endpoint to the ferrule
+      ep.nodeId = ferrule.ferruleId;
+      ep.pinId = ferrule.pinId;
+
+      // Replace the TB link in linkPath with the ferrule link
+      const lpIdx = cond.linkPath?.indexOf(tbLinkId);
+      if (lpIdx !== undefined && lpIdx >= 0 && cond.linkPath) {
+        cond.linkPath[lpIdx] = ferrule.linkId;
+      }
+
+      fixes.push(
+        `Conductor ${cond.id}: inserted ferrule node between ${cond.id} and terminal point ${tbNode.label}.${ep.pinId} — conductors cannot terminate directly at terminal points.`
+      );
+    }
+  }
+
+  // Clean up orphaned links (links where no conductor references them and
+  // they were the original TB links that got replaced)
+  if (fixes.length > 0) {
+    const usedLinkIds = new Set<string>();
+    for (const c of Object.values(conductors)) {
+      for (const lid of c.linkPath ?? []) usedLinkIds.add(lid);
+    }
+    for (const linkId of Object.keys(links)) {
+      if (!usedLinkIds.has(linkId)) {
+        // Only delete if both endpoints are still valid nodes
+        const l = links[linkId];
+        const src = nodes[l.sourceNodeId];
+        const tgt = nodes[l.targetNodeId];
+        if (src && tgt && getNodeMating(src) !== 'terminal_point' && getNodeMating(tgt) !== 'terminal_point') {
+          continue; // Link between two non-TB nodes, keep it
+        }
+        // Check if any other link connects these same nodes — if the ferrule replaced it, safe to remove
+        if (getNodeMating(src) === 'terminal_point' || getNodeMating(tgt) === 'terminal_point') {
+          delete links[linkId];
+        }
       }
     }
   }
@@ -250,6 +406,56 @@ function validatePlan(plan: PlanData): string[] {
     }
   }
 
+  // Check conductor endpoints at terminal_point nodes
+  for (const cond of conductors) {
+    for (const ep of [cond.startEndpoint, cond.endEndpoint]) {
+      if (!ep?.nodeId) continue;
+      const node = nodes[ep.nodeId];
+      if (!node) continue;
+      if (getNodeMating(node) === 'terminal_point') {
+        warnings.push(
+          `Conductor ${cond.id} terminates directly at terminal point ${node.label} — use an intermediary termination node (ferrule/ring/quickdisconnect).`
+        );
+      }
+    }
+  }
+
+  // Check mate compatibility
+  for (const mate of plan.mates ?? []) {
+    const node1 = nodes[mate.connector1Id];
+    const node2 = nodes[mate.connector2Id];
+    if (!node1 || !node2) continue;
+    const b1 = getNodeMating(node1);
+    const b2 = getNodeMating(node2);
+    const valid =
+      (b1 === 'connector' && b2 === 'connector') ||
+      (b1 === 'termination' && b2 === 'terminal_point') ||
+      (b1 === 'terminal_point' && b2 === 'termination');
+    if (!valid) {
+      warnings.push(
+        `Mate ${mate.id}: cannot mate ${node1.label} (${b1}) to ${node2.label} (${b2}) — only connector↔connector and termination↔terminal_point are valid.`
+      );
+    }
+  }
+
+  // Check shape/category consistency for terminal blocks
+  for (const node of Object.values(nodes)) {
+    if (node.type !== 'component') continue;
+    if (node.matingBehavior) continue; // explicit override, skip consistency check
+    const hasTPCategory = node.category === 'terminal_point';
+    const hasTBShape = node.shape === 'terminal_block';
+    if (hasTPCategory && !hasTBShape) {
+      warnings.push(
+        `${node.label} has category "terminal_point" but no terminal_block shape — it will behave as a connector, not a terminal point.`
+      );
+    }
+    if (hasTBShape && !hasTPCategory) {
+      warnings.push(
+        `${node.label} has terminal_block shape but missing category "terminal_point" — designator and icon will be wrong.`
+      );
+    }
+  }
+
   return warnings;
 }
 
@@ -334,6 +540,9 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
     async ({ project_id, plan_data }) => {
       const plan = plan_data as unknown as PlanData;
 
+      // Auto-fix terminal point wiring before saving (insert ferrule nodes)
+      const wiringFixes = fixTerminalPointWiring(plan);
+
       // Auto-fix colors before saving
       const colorFixes = fixPlanColors(plan);
 
@@ -345,6 +554,7 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
             success: true,
             generation: result.generation,
             modified_at: result.modified_at,
+            ...(wiringFixes.length > 0 ? { wiring_fixes: wiringFixes } : {}),
             ...(colorFixes.length > 0 ? { color_corrections: colorFixes } : {}),
           }, null, 2),
         }],
