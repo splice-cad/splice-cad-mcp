@@ -92,7 +92,7 @@ Parts are keyed by auto-incrementing instance identifiers:
 | Cable | C | C1, C2, C3 |
 | Terminal | T | T1, T2, T3 |
 
-When adding parts, use the next available key (e.g., if J1 and J2 exist, the next connector is J3).
+When adding parts, use the next available key (e.g., if X1 and X2 exist, the next connector is X3).
 
 ## ExpandedBomItem
 
@@ -203,21 +203,23 @@ You must **flatten** them when building harness BOM entries — copy the fields 
   cores: Array<{
     core_no: number;           // 1-based core number
     designation: string;       // Core label (e.g., "1", "2", "Shield")
-    core_color: string;        // HEX color (e.g., "#FF0000") — NOT color name
+    core_color: string;        // Color NAME from standard set (e.g., "orange", "white", "blue")
+    stripe?: string;           // Stripe color NAME (e.g., "orange" for white/orange pair)
     awg?: number;
     conductor_type?: string;   // "stranded" or "solid"
   }>;
 }
 \`\`\`
 
-**Important**: Cable core colors use \`core_color\` with **hex values** (e.g., \`"#FF0000"\`),
-NOT color names. This differs from wire specs which use color names (e.g., \`"red"\`).
+**Important**: Cable core colors use \`core_color\` with **color names** from the standard set
+(e.g., \`"orange"\`, \`"white"\`, \`"blue"\`) — same format as wire spec colors.
+For striped cores (e.g., white/orange), set \`core_color: "white"\` and \`stripe: "orange"\`.
 Each core also needs a \`designation\` string.
 
 ### Cable Wire BOM Entries
 
 When using a cable, each core gets its own wire BOM entry keyed as \`C1.1\`, \`C1.2\`, etc.
-These entries need a \`wireOverrides\` field with the hex color:
+These entries need a \`wireOverrides\` field with the color name:
 
 \`\`\`json
 {
@@ -232,7 +234,7 @@ These entries need a \`wireOverrides\` field with the hex color:
       "spec": { "awg": 22, "color": "red", "conductor_type": "stranded" }
     },
     "unit": "m",
-    "wireOverrides": { "color": "#FF0000" }
+    "wireOverrides": { "color": "red" }
   }
 }
 \`\`\`
@@ -364,6 +366,323 @@ search result into \`part_id\`:
 
 The \`part_id\` field is critical — it links back to the database part for BOM hydration on reload.
 Without it the backend will reject the save with \`"no part_id for Jn"\`.
+
+## Examples — Copy-Paste Patterns
+
+### Multi-Wire Harness with Signal Labels
+
+Two 4-pin Deutsch DT connectors wired point-to-point with signal names:
+
+\`\`\`json
+{
+  "name": "Sensor Cable Assembly",
+  "is_public": false,
+  "bom": {
+    "X1": {
+      "instance_id": "X1",
+      "part": { "part_id": "SYNTHETIC-dt04-4p", "kind": "connector", "mpn": "DT04-4P", "manufacturer": "Deutsch", "description": "DT 4-Pin Receptacle", "spec": { "positions": 4, "contact_gender": "female", "series": "DT", "shape": "rectangular", "rows": 1 } },
+      "unit": "each"
+    },
+    "X2": {
+      "instance_id": "X2",
+      "part": { "part_id": "SYNTHETIC-dt06-4s", "kind": "connector", "mpn": "DT06-4S", "manufacturer": "Deutsch", "description": "DT 4-Pin Plug", "spec": { "positions": 4, "contact_gender": "male", "series": "DT", "shape": "rectangular", "rows": 1 } },
+      "unit": "each"
+    },
+    "W1": {
+      "instance_id": "W1",
+      "part": { "part_id": "SYNTHETIC-18awg-red", "kind": "wire", "mpn": "18 AWG Red", "manufacturer": "Generic", "spec": { "awg": 18, "color": "red", "conductor_type": "stranded" } },
+      "unit": "m"
+    },
+    "W2": {
+      "instance_id": "W2",
+      "part": { "part_id": "SYNTHETIC-18awg-blk", "kind": "wire", "mpn": "18 AWG Black", "manufacturer": "Generic", "spec": { "awg": 18, "color": "black", "conductor_type": "stranded" } },
+      "unit": "m"
+    },
+    "W3": {
+      "instance_id": "W3",
+      "part": { "part_id": "SYNTHETIC-22awg-grn", "kind": "wire", "mpn": "22 AWG Green", "manufacturer": "Generic", "spec": { "awg": 22, "color": "green", "conductor_type": "stranded" } },
+      "unit": "m"
+    },
+    "W4": {
+      "instance_id": "W4",
+      "part": { "part_id": "SYNTHETIC-22awg-wht", "kind": "wire", "mpn": "22 AWG White", "manufacturer": "Generic", "spec": { "awg": 22, "color": "white", "conductor_type": "stranded" } },
+      "unit": "m"
+    }
+  },
+  "data": {
+    "mapping": {
+      "W1": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 1, "side": "right" },
+        "label_end1": "12V", "label_end2": "12V", "length_mm": 500
+      },
+      "W2": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 2, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 2, "side": "right" },
+        "label_end1": "GND", "label_end2": "GND", "length_mm": 500
+      },
+      "W3": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 3, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 3, "side": "right" },
+        "label_end1": "CAN_H", "label_end2": "CAN_H", "length_mm": 500,
+        "twisted_pair_id": "tp_can"
+      },
+      "W4": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 4, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 4, "side": "right" },
+        "label_end1": "CAN_L", "label_end2": "CAN_L", "length_mm": 500,
+        "twisted_pair_id": "tp_can"
+      }
+    },
+    "connector_positions": { "X1": { "x": 100, "y": 200 }, "X2": { "x": 600, "y": 200 } },
+    "wire_anchors": {}
+  }
+}
+\`\`\`
+
+**Key points:**
+- W3 and W4 share the same \`twisted_pair_id\` — they render as a twisted pair
+- Signal labels (\`label_end1\`/\`label_end2\`) appear on the schematic at each endpoint
+- Wire gauge is a number (18), color is a name ("red") — NOT hex, NOT "18 AWG"
+
+### Cable with Core Mappings
+
+An 8-core cable connecting two connectors. Each core gets its own wire BOM entry (C1.1, C1.2, etc.) and mapping entry.
+
+\`\`\`json
+{
+  "bom": {
+    "X1": {
+      "instance_id": "X1",
+      "part": { "part_id": "SYNTHETIC-conn-8p", "kind": "connector", "mpn": "8-Pin Receptacle", "manufacturer": "Generic", "spec": { "positions": 8, "shape": "rectangular", "rows": 2 } },
+      "unit": "each"
+    },
+    "X2": {
+      "instance_id": "X2",
+      "part": { "part_id": "SYNTHETIC-conn-8p", "kind": "connector", "mpn": "8-Pin Receptacle", "manufacturer": "Generic", "spec": { "positions": 8, "shape": "rectangular", "rows": 2 } },
+      "unit": "each"
+    },
+    "C1": {
+      "instance_id": "C1",
+      "part": {
+        "part_id": "SYNTHETIC-cat6-8core", "kind": "cable", "mpn": "Cat6 8-Core Purple", "manufacturer": "Generic",
+        "description": "Cat6 8-core cable, purple jacket, 24 AWG",
+        "spec": {
+          "core_count": 8,
+          "shielded": false,
+          "jacket_color": "purple",
+          "cores": [
+            { "core_no": 1, "designation": "1", "core_color": "white", "stripe": "orange", "awg": 24 },
+            { "core_no": 2, "designation": "2", "core_color": "orange", "awg": 24 },
+            { "core_no": 3, "designation": "3", "core_color": "white", "stripe": "green", "awg": 24 },
+            { "core_no": 4, "designation": "4", "core_color": "blue", "awg": 24 },
+            { "core_no": 5, "designation": "5", "core_color": "white", "stripe": "blue", "awg": 24 },
+            { "core_no": 6, "designation": "6", "core_color": "green", "awg": 24 },
+            { "core_no": 7, "designation": "7", "core_color": "white", "stripe": "brown", "awg": 24 },
+            { "core_no": 8, "designation": "8", "core_color": "brown", "awg": 24 }
+          ]
+        }
+      },
+      "unit": "m"
+    },
+    "C1.1": {
+      "instance_id": "C1.1",
+      "part": { "part_id": "SYNTHETIC-wire-c1-1", "kind": "wire", "mpn": "Core 1 (white/orange)", "manufacturer": "Generic", "spec": { "awg": 24, "color": "white", "stripe": "orange", "conductor_type": "stranded" } },
+      "unit": "m",
+      "wireOverrides": { "color": "white", "stripe": "orange" }
+    },
+    "C1.2": {
+      "instance_id": "C1.2",
+      "part": { "part_id": "SYNTHETIC-wire-c1-2", "kind": "wire", "mpn": "Core 2 (orange)", "manufacturer": "Generic", "spec": { "awg": 24, "color": "orange", "conductor_type": "stranded" } },
+      "unit": "m",
+      "wireOverrides": { "color": "orange" }
+    }
+  },
+  "data": {
+    "mapping": {
+      "C1.1": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 1, "side": "right" }
+      },
+      "C1.2": {
+        "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 2, "side": "left" },
+        "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 2, "side": "right" }
+      }
+    },
+    "connector_positions": { "X1": { "x": 100, "y": 200 }, "X2": { "x": 600, "y": 200 } },
+    "cable_positions": { "C1": { "x": 350, "y": 200 } },
+    "wire_anchors": {}
+  }
+}
+\`\`\`
+
+**Key points (cables are easy to get wrong):**
+- Cable spec uses \`core_count\` (NOT \`cores: 8\`), \`jacket_color\` (NOT \`outer_color\`), and a \`cores\` array of objects
+- Each core object needs \`core_no\`, \`designation\`, \`core_color\` (color **name**, e.g. \`"orange"\`), optional \`stripe\` (for striped pairs), and \`awg\`
+- Each core MUST have its own wire BOM entry keyed \`C1.1\`, \`C1.2\`, etc. with \`wireOverrides: { color: "name", stripe?: "name" }\`
+- Cable connections use \`connector_pin\` endpoints with \`C1.N\` as the mapping key — the key format associates the connection with the cable core
+- Cable needs a position in \`cable_positions\` (separate from \`connector_positions\`)
+- Only 2 cores shown for brevity — repeat the pattern for all cores
+
+### Flying Lead with Terminal
+
+A connector with one pin wired to a ring terminal flying lead:
+
+\`\`\`json
+{
+  "W1": {
+    "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" },
+    "end2": { "type": "flying_lead", "termination_type": "bare", "terminal_instance": "T1" },
+    "length_mm": 300
+  }
+}
+\`\`\`
+
+The \`terminal_instance\` references a terminal BOM entry (T1) — this is the ring/spade terminal attached to the wire end.
+
+### Live Bridge — execute_commands Examples
+
+#### Adding a fully-specified connector
+
+**CRITICAL:** \`AddPartsCommand\` requires the \`part\` field with full specs. Without \`item.part\`, connectors default to 2-pin generic and wires default to 20 AWG red.
+
+\`\`\`json
+execute_commands({
+  "commands": [
+    {
+      "command": "AddPartsCommand",
+      "params": {
+        "items": [{
+          "kind": "connector",
+          "mpn": "DT04-4P",
+          "unit": "each",
+          "part": {
+            "id": "SYNTHETIC-dt04-4p",
+            "kind": "connector",
+            "mpn": "DT04-4P",
+            "manufacturer": "Deutsch",
+            "description": "DT Series 4-Pin Receptacle",
+            "spec": { "positions": 4, "contact_gender": "female", "series": "DT", "shape": "rectangular", "rows": 1 }
+          }
+        }]
+      }
+    }
+  ],
+  "description": "Add DT04-4P connector"
+})
+\`\`\`
+
+The \`item.part.spec\` must be **flat** format (fields directly on spec, NOT nested under spec.connector).
+
+#### Wiring with full wire specs
+
+\`BulkConnectionCommand\` accepts a \`wire\` field per connection with full wire specs. Without \`wire\`, auto-created wires default to 20 AWG red stranded.
+
+\`\`\`json
+execute_commands({
+  "commands": [
+    {
+      "command": "BulkConnectionCommand",
+      "params": {
+        "connections": [{
+          "end1": { "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" },
+          "end2": { "type": "connector_pin", "connector_instance": "X2", "pin": 1, "side": "right" },
+          "wire": {
+            "id": "SYNTHETIC-18awg-red",
+            "kind": "wire",
+            "mpn": "18 AWG Red",
+            "manufacturer": "Generic",
+            "spec": { "awg": 18, "color": "red", "conductor_type": "stranded" }
+          }
+        }]
+      }
+    }
+  ],
+  "description": "Wire X1.1 to X2.1 with 18 AWG red"
+})
+\`\`\`
+
+#### Complete workflow — add parts, wire, and arrange
+
+\`\`\`
+Batch 1: AddPartsCommand (connectors + wires with full specs)
+         + BulkConnectionCommand (with wire specs)
+Batch 2: AutoArrangeCommand or AutoRouteCommand (MUST be separate batch)
+Batch 3: getSummary to verify
+\`\`\`
+
+**AutoRouteCommand / AutoArrangeCommand cannot be batched** with AddPartsCommand or BulkConnectionCommand — they depend on established state. Always run layout commands in a separate \`execute_commands\` call.
+
+**Batch error behavior:** If a command fails mid-batch, prior commands may have already applied. The batch does NOT rollback. Check \`getSummary\` after any error.
+
+**Instance keys:** \`AddPartsCommand\` auto-generates the next available key (X3 if X1 and X2 exist). Call \`getSummary\` after adding parts to confirm assigned keys before referencing them.
+
+## Live Bridge (Assembly Mode)
+
+When a harness/assembly is open in the browser with the Agent Bridge enabled, you can make real-time edits via the WebSocket bridge. Use the \`assembly-live\` prompt or manually target the \`harness:<uuid>\` namespace.
+
+### Queries
+
+Use \`get_live_state\` with namespace \`harness:<uuid>\`:
+
+| Query | Returns |
+|-------|---------|
+| \`getData\` | Full live state: \`bom\`, \`mapping\`, \`connector_positions\`, \`cable_positions\`, \`wire_anchors\`, \`design_notes\`, \`name\`, \`harness_id\` |
+| \`getSummary\` | Counts: \`part_count\`, \`connector_count\`, \`wire_count\`, \`cable_count\`, \`connection_count\`, \`design_note_count\`, \`name\`, \`harness_id\` |
+| \`canUndo\` | \`{ canUndo: boolean }\` |
+| \`canRedo\` | \`{ canRedo: boolean }\` |
+
+### Commands
+
+Use \`execute_command\` / \`execute_commands\` with namespace \`harness:<uuid>\`. Key commands:
+
+**Part management:**
+- \`AddPartsCommand\` — \`{ items: [{ part_id, unit, ... }], viewportState? }\`
+- \`DeletePartsCommand\` — \`{ keys: ["X1", "W2", ...] }\`
+
+**Connections:**
+- \`BulkConnectionCommand\` — \`{ connections: [{ end1: ConnectionTermination, end2: ConnectionTermination, wire?: WirePart }] }\`
+- \`AddConnectionCommand\` — \`{ end1, end2, wire?, unit? }\`
+- \`RemoveConnectionCommand\` — \`{ connectionKey: "W1" }\`
+
+**Edit parts:**
+- \`EditConnectorCommand\` — \`{ partKey: "X1", newPartData: { ... } }\`
+- \`EditWireCommand\` — \`{ partKey: "W1", newPartData: { ... } }\`
+- \`EditCableCommand\` — \`{ partKey: "C1", newPartData: { ... } }\`
+
+**Layout:**
+- \`BulkMoveCommand\` — \`{ selectedItems, deltaX, deltaY }\`
+- \`AutoArrangeCommand\` — \`{ selectedItems, gridSpacing? }\`
+- \`AlignCommand\` — \`{ direction, selectedItems, gridSpacing? }\`
+
+**Swap:**
+- \`SwapConnectorCommand\` / \`SwapWireCommand\` / \`SwapCableCommand\` — \`{ swapData: { partKey, newPartId, newMpn } }\`
+
+**Labels:**
+- \`UpdateSignalLabelCommand\` — \`{ wireKey, oldLabel, newLabel }\`
+- \`AddBundleLabelCommand\` — \`{ label: BundleLabel }\`
+
+**Delete specific types:**
+- \`DeleteWireCommand\` — \`{ wireKey }\`
+- \`DeleteCableCommand\` — \`{ cableKey }\`
+- \`DeleteConnectorCommand\` — \`{ connectorKey }\`
+
+### ConnectionTermination format
+
+\`\`\`json
+{ "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" }
+{ "type": "cable_core", "cable_instance": "C1", "core_no": 1, "side": "left" }
+{ "type": "flying_lead", "termination_type": "tinned" }
+\`\`\`
+
+### Workflow
+
+1. \`is_bridge_connected\` — look for \`harness:<uuid>\` namespace
+2. \`get_live_state({ query: "getSummary" })\` — understand current state
+3. \`get_live_state({ query: "getData" })\` — full BOM/connections if needed
+4. Batch changes with \`execute_commands\` — always prefer batching
+5. Verify with \`getSummary\` after changes
+6. \`undo\` / \`redo\` work on the harness command history
 `;
 
 export function registerHarnessSchemaResource(server: McpServer) {

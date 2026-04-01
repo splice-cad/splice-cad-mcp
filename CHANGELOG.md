@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.4.0 (2026-04-01)
+
+### Assembly Live Bridge
+
+- **`assembly-live` prompt** — new context prompt for working on assemblies/harnesses via WebSocket bridge. Documents `AddPartsCommand` format (requires `item.part` for full specs), `BulkConnectionCommand` wire field, cable spec format, batch constraints, and correct workflow.
+- **Harness namespace routing** — `execute_command`, `execute_commands`, `get_live_state`, `undo`, `redo` now route to the harness command system when targeting a `harness:*` namespace. Queries: `getData`, `getSummary`, `canUndo`, `canRedo`.
+
+### Harness Schema Improvements (harness-data resource)
+
+- **Cable cookbook example** — new copy-paste example showing correct CableSpec with `core_count`, `jacket_color`, `cores` array of objects (not strings), `stripe` field for striped pairs, and required `C1.N` wire BOM entries with `wireOverrides`.
+- **Fixed `core_color` documentation** — corrected from "HEX" to color names from standard set. Cable core colors use the same format as wire specs.
+- **Added `stripe` to CableSpec** — core objects now document the `stripe` field for striped wire pairs (e.g., white/orange).
+- **Fixed `wireOverrides` example** — changed from hex to color names.
+- **Fixed X/J prefix inconsistency** — connector instance keys use X prefix (not J).
+- **Multi-wire example** — new example with signal labels, twisted pairs, and proper flat spec format.
+- **Flying lead example** — shows `terminal_instance` reference for ring/spade terminals.
+- **Live bridge command docs** — full `AddPartsCommand` and `BulkConnectionCommand` param format with correct `item.part` nesting, batch constraints, and error behavior.
+
+### Agent Efficiency Improvements
+
+- **Structured `validate_plan` response** — returns `{ valid, warning_count, warnings[] }` JSON instead of plain text string.
+- **`save_plan` always returns fix summary** — `auto_corrected`, `wiring_fixes`, `color_corrections` always present (even when empty), so agents know the plan was clean.
+- **Mating validation in `validate_plan`** — checks mate compatibility, conductor endpoints at terminal_point nodes, and shape/category consistency.
+- **Auto-fix terminal point wiring in `save_plan`** — inserts ferrule intermediary nodes when conductors terminate directly at terminal_point nodes.
+- **Pattern index in plan examples** — quick reference table at top of examples resource for fast pattern lookup.
+- **Mode-agnostic live tool descriptions** — `execute_command`, `execute_commands`, `get_live_state` descriptions now mention both plan (`project:*`) and assembly (`harness:*`) namespaces.
+- **Doc-reading guidance in prompts** — `api-mode` and `build-harness` prompts specify reading order (examples first, then schema).
+
 ## 0.3.3 (2026-03-31)
 
 ### Schema Clarifications (plan-data resource)

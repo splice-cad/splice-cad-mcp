@@ -57,6 +57,113 @@ export function registerPrompts(server: McpServer) {
   );
 
   server.prompt(
+    'assembly-live',
+    'Work on an assembly (harness) currently open in the browser via the live WebSocket bridge. Add parts, create connections, edit wires, and rearrange the schematic in real-time.',
+    {},
+    () => ({
+      messages: [{
+        role: 'user' as const,
+        content: {
+          type: 'text' as const,
+          text: `You are working on an **assembly** (also called a harness) through the **live WebSocket bridge**. The user has an assembly open in their browser and you can make changes that appear in real-time on their canvas.
+
+## Context: Assembly Live Bridge
+
+**Namespace pattern:** \`harness:<uuid>\`
+
+**Your primary tools:**
+- \`is_bridge_connected\` — check connection first, always
+- \`get_live_state({ query: "getSummary" })\` — part counts, connection counts, harness name
+- \`get_live_state({ query: "getData" })\` — full harness state (BOM, connections, positions)
+- \`execute_commands\` — **preferred** for all modifications (batched, atomic, single undo)
+- \`execute_command\` — single command only when truly one operation
+- \`undo\` / \`redo\` — undo/redo in the browser
+
+**Available supporting tools:**
+- \`search_connectors\` / \`search_wires\` / \`search_cables\` — find parts in the database
+- \`lookup_part\` — DigiKey lookup for images, datasheets, specs
+- \`create_component\` / \`create_cable\` — create custom parts
+- \`get_harness_summary\` — server-side summary (uses last saved state, not live)
+
+**DO NOT use in live mode:**
+- \`save_harness\` — the browser holds the live state; the user saves when they choose to
+- \`get_harness\` — use \`get_live_state\` instead, which reflects unsaved changes
+
+**CRITICAL — AddPartsCommand requires \`item.part\` for full specs:**
+\`\`\`json
+{ "items": [{ "kind": "connector", "mpn": "DT04-4P", "unit": "each",
+  "part": { "id": "SYNTHETIC-dt04-4p", "kind": "connector", "mpn": "DT04-4P",
+    "manufacturer": "Deutsch", "description": "DT 4-Pin Receptacle",
+    "spec": { "positions": 4, "contact_gender": "female", "series": "DT", "shape": "rectangular" } }
+}] }
+\`\`\`
+Without \`item.part\`, connectors default to 2-pin generic. Always include the nested \`part\` object.
+
+**BulkConnectionCommand — include \`wire\` for full wire specs:**
+\`\`\`json
+{ "connections": [{ "end1": {...}, "end2": {...},
+  "wire": { "id": "SYNTHETIC-18awg-red", "kind": "wire", "mpn": "18 AWG Red",
+    "manufacturer": "Generic", "spec": { "awg": 18, "color": "red", "conductor_type": "stranded" } }
+}] }
+\`\`\`
+Without \`wire\`, auto-created wires default to 20 AWG red.
+
+**Other key commands:**
+- **Delete:** \`DeletePartsCommand\` \`{ keys }\`, \`DeleteWireCommand\` \`{ wireKey }\`, \`DeleteConnectorCommand\` \`{ connectorKey }\`
+- **Edit:** \`EditConnectorCommand\` \`{ partKey, newPartData }\` — replaces part spec entirely
+- **Layout:** \`AutoArrangeCommand\` \`{}\` — **MUST be in a separate batch from add/connection commands**
+- **Labels:** \`UpdateSignalLabelCommand\` \`{ wireKey, oldLabel, newLabel }\`
+
+**Connection termination format:**
+\`\`\`json
+{ "type": "connector_pin", "connector_instance": "X1", "pin": 1, "side": "left" }
+{ "type": "cable_core", "cable_instance": "C1", "core_no": 1, "side": "left" }
+{ "type": "flying_lead", "termination_type": "tinned" }
+\`\`\`
+
+**Cables — read \`splice://schema/harness-data\` "Cable with Core Mappings" example before using cables:**
+- Cable spec uses \`core_count\` (NOT \`cores: 8\`), \`jacket_color\` (NOT \`outer_color\`), and a \`cores\` array of **objects** (NOT strings)
+- Each core object: \`{ core_no, designation, core_color: "name", stripe?: "name", awg }\` — colors are **names** (same as wires), NOT hex
+- For striped pairs: \`core_color: "white", stripe: "orange"\` = white/orange
+- Each core MUST have its own wire BOM entry keyed \`C1.1\`, \`C1.2\`, etc. with \`wireOverrides: { color: "name", stripe?: "name" }\`
+- Cable connections use \`connector_pin\` endpoints — the \`C1.N\` mapping key associates the connection with the cable core
+- Cable needs a position in \`cable_positions\` (separate from \`connector_positions\`)
+
+**Cable AddPartsCommand example:**
+\`\`\`json
+{ "items": [{ "kind": "cable", "mpn": "Cat6 Purple 8-Core", "unit": "m",
+  "part": { "id": "SYNTHETIC-cat6", "kind": "cable", "mpn": "Cat6 Purple 8-Core",
+    "manufacturer": "Generic", "description": "8-core 24 AWG purple jacket",
+    "spec": { "core_count": 8, "jacket_color": "purple", "shielded": false,
+      "cores": [
+        { "core_no": 1, "designation": "1", "core_color": "white", "stripe": "orange", "awg": 24 },
+        { "core_no": 2, "designation": "2", "core_color": "orange", "awg": 24 }
+      ] } }
+}] }
+\`\`\`
+
+**Key patterns:**
+- Always batch operations with \`execute_commands\` — 10-50x faster than individual calls
+- Read the \`splice://schema/harness-data\` resource for full examples and param formats
+- Part instance keys: X (connector), W (wire), C (cable), T (terminal)
+- BOM specs must be **flat** format (\`part.spec.series\`, NOT \`part.spec.connector.series\`)
+- AutoArrange/AutoRoute MUST be in a **separate** batch from add/connection commands
+- Batch errors don't rollback prior commands — check \`getSummary\` after errors
+
+**Workflow:**
+1. \`is_bridge_connected\` — verify connection (look for \`harness:*\` namespace)
+2. \`get_live_state({ query: "getSummary" })\` — understand current state
+3. Batch 1: \`AddPartsCommand\` (connectors + cable with full \`item.part\` specs)
+4. Batch 2: \`BulkConnectionCommand\` (with \`wire\` specs for individual wires, or \`C1.N\` keys for cables)
+5. \`getSummary\` — confirm assigned keys and connections
+6. Batch 3: \`AutoArrangeCommand\` (separate batch!)
+7. \`getSummary\` — verify final state`,
+        },
+      }],
+    }),
+  );
+
+  server.prompt(
     'component-creator-live',
     'Work in the Component Creator page via the live WebSocket bridge. Create or edit a component with SVG graphics, pin placement, and specs in real-time.',
     {},
@@ -176,10 +283,13 @@ export function registerPrompts(server: McpServer) {
 - \`undo\` / \`redo\`
 - \`is_bridge_connected\`
 
+**Reading order (important — read in this order):**
+1. \`splice://examples/plans\` — **start here**, find a pattern that matches your use case
+2. \`splice://schema/plan-data\` — reference for edge cases (terminal blocks, mating rules, BOM format)
+3. For legacy harnesses: \`splice://schema/harness-data\` (completely different data model — flat specs, color names not hex)
+
 **Key patterns:**
-- Read the \`splice://schema/plan-data\` resource for PlanData structure
-- Read the \`splice://examples/plans\` resource for copy-paste-ready wiring patterns
-- Build complete plan JSON and use \`save_plan\` to persist — it auto-corrects colors
+- Build complete plan JSON and use \`save_plan\` to persist — it auto-corrects colors and terminal point wiring
 - Use \`get_plan_summary\` + \`validate_plan\` after saving to verify
 - Terminal blocks need intermediate ferrule nodes — never connect conductors directly to terminal block pins
 - Conductor colors should be hex strings (\`"#FF0000"\`); \`save_plan\` auto-converts color names
@@ -187,7 +297,7 @@ export function registerPrompts(server: McpServer) {
 **Workflow:**
 1. Research parts: \`lookup_part\`, web search, or user description
 2. \`create_project\` — create a project
-3. Read \`splice://schema/plan-data\` and \`splice://examples/plans\` for reference
+3. Read resources in order above
 4. Build the plan JSON: nodes, links, conductors, BOM entries, nets
 5. \`save_plan\` to persist
 6. \`get_plan_summary\` + \`validate_plan\` to verify
@@ -210,7 +320,7 @@ export function registerPrompts(server: McpServer) {
         role: 'user' as const,
         content: {
           type: 'text' as const,
-          text: `Build a cable harness based on this:\n\n${description}\n\nYou are working in **REST API mode** — no browser connection needed.\n\nWorkflow:\n1. Research parts (web search + lookup_part for real MPNs, images, datasheets)\n2. Create a project with create_project\n3. Read the splice://schema/plan-data resource for PlanData structure\n4. Read the splice://examples/plans resource for wiring patterns\n5. Build the plan JSON: nodes (components with pins), links (bundles), conductors (wires with gauge/color), BOM entries, nets\n6. Remember: terminal blocks need intermediate ferrule nodes — never connect conductors directly to terminal block pins\n7. Use save_plan to write it (auto-corrects colors)\n8. Run get_plan_summary and validate_plan to verify\n9. Fix any issues\n10. Generate assembly with generate_assembly`,
+          text: `Build a cable harness based on this:\n\n${description}\n\nYou are working in **REST API mode** — no browser connection needed.\n\n**Reading order:**\n1. splice://examples/plans — start here, find a matching pattern\n2. splice://schema/plan-data — reference for edge cases (terminal blocks, mating rules, BOM)\n\nWorkflow:\n1. Research parts (web search + lookup_part for real MPNs, images, datasheets)\n2. Create a project with create_project\n3. Read resources in order above\n4. Build the plan JSON: nodes (components with pins), links (bundles), conductors (wires with gauge/color), BOM entries, nets\n5. Remember: terminal blocks need intermediate ferrule nodes — never connect conductors directly to terminal block pins\n6. Use save_plan to write it (auto-corrects colors and terminal point wiring)\n7. Run get_plan_summary and validate_plan to verify\n8. Fix any issues\n9. Generate assembly with generate_assembly`,
         },
       }],
     }),

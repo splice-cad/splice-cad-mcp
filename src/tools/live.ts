@@ -17,7 +17,7 @@ function errorResult(err: unknown) {
 export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
   server.tool(
     'is_bridge_connected',
-    'Check which browser tabs are connected via the WebSocket bridge. Returns connected namespaces (project/harness IDs). When connected, you can use execute_command for live canvas updates with undo/redo.',
+    'Check which browser tabs are connected via the WebSocket bridge. Returns connected namespaces — project:<uuid> for plans, harness:<uuid> for assemblies. Use the namespace value with execute_command/get_live_state to target a specific tab.',
     {},
     async () => {
       const bridge = getBridge();
@@ -36,9 +36,9 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
 
   server.tool(
     'execute_command',
-    'Execute a single plan command through the live WebSocket bridge. PREFER execute_commands (plural) for batching multiple operations in one call — it is much faster. Only use this for truly single operations. Canvas updates immediately, action added to undo history.',
+    'Execute a single command through the live WebSocket bridge. Works for both plan mode (project:* namespace) and assembly/harness mode (harness:* namespace). PREFER execute_commands (plural) for batching — much faster. Canvas updates immediately, action added to undo history.',
     {
-      command: z.string().describe('Command class name (e.g. "AddNodeCommand", "AddLinkCommand")'),
+      command: z.string().describe('Command class name. Plan: "AddNodeCommand", "AddLinkCommand", etc. Assembly: "AddPartsCommand", "BulkConnectionCommand", "EditConnectorCommand", etc.'),
       params: z.record(z.unknown()).describe('Constructor parameters as JSON (excluding store refs)'),
       namespace: z.string().optional().describe('Target a specific tab by namespace (e.g. "project:uuid"). Omit to use the most recently connected tab.'),
     },
@@ -59,7 +59,7 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
 
   server.tool(
     'execute_commands',
-    'PREFERRED over execute_command. Execute multiple commands in a single call — much faster than calling execute_command repeatedly. All commands run atomically and undo as one action. Batch everything: add component + assign BOM + create link + add conductors — all in one call.',
+    'PREFERRED over execute_command. Execute multiple commands in a single call — much faster than calling execute_command repeatedly. All commands run atomically and undo as one action. Works for both plan (project:*) and assembly (harness:*) namespaces.',
     {
       commands: z.array(z.object({
         command: z.string().describe('Command class name'),
@@ -127,13 +127,13 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
 
   server.tool(
     'get_live_state',
-    'Get or set live frontend state. Reflects all unsaved changes. Use setComponentState to update the Component Creator form fields.',
+    'Get or set live frontend state. Reflects all unsaved changes, including for assemblies (harness:* namespace). Use setComponentState to update the Component Creator form fields.',
     {
       query: z.enum([
         'getData', 'getSummary', 'canUndo', 'canRedo',
         'getComponentState', 'getSvgElements',
         'setComponentState',
-      ]).describe('Plan: getData, getSummary, canUndo, canRedo. Component creator: getComponentState, getSvgElements, setComponentState (requires params).'),
+      ]).describe('Plan (project:*): getData (PlanData), getSummary (counts). Assembly (harness:*): getData (BOM + connections + positions), getSummary (part/connection counts). Both: canUndo, canRedo. Component creator: getComponentState, getSvgElements, setComponentState.'),
       params: z.record(z.unknown()).optional().describe('Parameters for mutations like setComponentState. Keys: form (mpn, manufacturer, description, img_url, datasheet_url), spec (gender, shape, category, positions, rows, series, pitch_mm, wire_awg_min, wire_awg_max), svg (clear, elements, pins), action ("save" to save component, "createNew" to reset)'),
       namespace: z.string().optional().describe('Target tab namespace'),
     },

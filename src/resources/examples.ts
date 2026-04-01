@@ -4,6 +4,16 @@ const PLAN_EXAMPLES = `# Splice Plan Examples — Cookbook
 
 Copy-paste-ready patterns extracted from real production harnesses. Each example is a valid, self-contained PlanData fragment. Combine patterns to build complete harnesses.
 
+## Quick Reference
+
+| # | Pattern | When to use |
+|---|---------|-------------|
+| 1 | PS → CB → Terminal Block | Power distribution with categories, bridged positions, ferrule intermediary |
+| 2 | Connector with Crimp Contacts | Point-to-point with crimp terminations and mate relationship |
+| 3 | Branch Point Distribution | Star topology, conductor splices, different gauge trunk/legs |
+| 4 | D-Sub Avionics | Multi-pin with pin functions, twisted pairs, partial mate mapping |
+| 5 | Terminal Block with Ferrules | Per-position ferrule nodes, multiple conductors to one TB |
+
 ## Pattern 1: Power Supply → Circuit Breaker → Terminal Block
 
 A 24V power supply feeds a circuit breaker, which distributes power to a bridged terminal block. The terminal block connection uses a ferrule intermediary node — conductors never connect directly to a terminal_point node.

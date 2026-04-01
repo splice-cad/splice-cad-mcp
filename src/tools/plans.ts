@@ -547,6 +547,7 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
       const colorFixes = fixPlanColors(plan);
 
       const result = await getClient().savePlan(project_id, plan);
+      const autoCorrected = wiringFixes.length > 0 || colorFixes.length > 0;
       return {
         content: [{
           type: 'text' as const,
@@ -554,8 +555,9 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
             success: true,
             generation: result.generation,
             modified_at: result.modified_at,
-            ...(wiringFixes.length > 0 ? { wiring_fixes: wiringFixes } : {}),
-            ...(colorFixes.length > 0 ? { color_corrections: colorFixes } : {}),
+            auto_corrected: autoCorrected,
+            wiring_fixes: wiringFixes,
+            color_corrections: colorFixes,
           }, null, 2),
         }],
       };
@@ -582,7 +584,7 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
 
   server.tool(
     'validate_plan',
-    'Validate a project\'s plan for structural issues: orphan nodes, dangling conductors, missing parts, invalid references. Returns a list of warnings.',
+    'Validate a project\'s plan for structural issues: orphan nodes, dangling conductors, missing parts, invalid references, mating compatibility, terminal point wiring, and shape/category consistency. Returns structured JSON with warnings array.',
     {
       project_id: z.string().describe('Project UUID'),
     },
@@ -592,9 +594,11 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
       return {
         content: [{
           type: 'text' as const,
-          text: warnings.length === 0
-            ? 'Plan is valid — no issues found.'
-            : `Found ${warnings.length} issue(s):\n${warnings.map(w => `• ${w}`).join('\n')}`,
+          text: JSON.stringify({
+            valid: warnings.length === 0,
+            warning_count: warnings.length,
+            warnings,
+          }, null, 2),
         }],
       };
     },
