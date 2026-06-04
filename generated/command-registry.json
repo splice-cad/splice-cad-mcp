@@ -1,7 +1,7 @@
 {
   "description": "Auto-generated command registry from frontend/src/commands/. Lists all commands with constructor parameters, organized by domain (plan, svg-editor, harness-builder).",
-  "generated_at": "2026-03-27T20:39:50.284Z",
-  "command_count": 261,
+  "generated_at": "2026-06-02T18:53:02.281Z",
+  "command_count": 288,
   "commands": {
     "AddBomEntryCommand": {
       "file": "AddBomEntryCommand",
@@ -187,6 +187,25 @@
         {
           "name": "sheetNumber",
           "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "AddJumperBarCommand": {
+      "file": "AddJumperBarCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "positions",
+          "type": "JumperBarPosition[]",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "{ color?: string; bomEntryId?: string }",
           "required": false
         }
       ]
@@ -449,6 +468,40 @@
         }
       ]
     },
+    "AddPlanNoteCommand": {
+      "file": "AddPlanNoteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "position",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "noteType",
+          "type": "PlanNoteType",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "{ title?: string; width?: number; noteClass?: string }",
+          "required": false
+        }
+      ]
+    },
     "AddPolygonPointCommand": {
       "file": "AddPolygonPointCommand",
       "domain": "svg-editor",
@@ -558,6 +611,30 @@
         }
       ]
     },
+    "AddToVisualGroupCommand": {
+      "file": "AddToVisualGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
     "AddWireGroupCommand": {
       "file": "AddWireGroupCommand",
       "domain": "plan",
@@ -594,6 +671,11 @@
         },
         {
           "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "fixedGap",
           "type": "number",
           "required": false
         }
@@ -654,6 +736,28 @@
         {
           "name": "gridSpacing",
           "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "ApplyDrawingTemplateCommand": {
+      "file": "ApplyDrawingTemplateCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "",
+          "required": true
+        },
+        {
+          "name": "templateData",
+          "type": "DrawingTemplateData",
+          "required": true
+        },
+        {
+          "name": "harnessOverrides",
+          "type": "{ drawingNumber?: string; revision?: string; }",
           "required": false
         }
       ]
@@ -852,12 +956,12 @@
         {
           "name": "nodeIds",
           "type": "string[]",
-          "required": true
+          "required": false
         },
         {
           "name": "linkIds",
           "type": "string[]",
-          "required": true
+          "required": false
         }
       ]
     },
@@ -922,6 +1026,30 @@
           "name": "pageId",
           "type": "string | null",
           "required": false
+        },
+        {
+          "name": "contentSizes",
+          "type": "Map<string, { width: number; height: number }>",
+          "required": false
+        },
+        {
+          "name": "options",
+          "type": "{ applyLearnedLayoutPass?: boolean; /** Apply cluster-aware 2D placement after Sugiyama. Groups nodes into * cable-pairs/trunks/fan-outs and stacks them vertically as units. */ applyClusterPlacement?: boolean; }",
+          "required": false
+        }
+      ]
+    },
+    "AutoRouteAllLinksCommand": {
+      "file": "AutoRouteAllLinksCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "options",
+          "type": "RoutingScopeOptions",
+          "required": false
         }
       ]
     },
@@ -966,7 +1094,7 @@
     },
     "BatchCommand": {
       "file": "BatchCommand",
-      "domain": "harness-builder",
+      "domain": "plan",
       "stores": [],
       "params": [
         {
@@ -977,7 +1105,7 @@
         {
           "name": "commands",
           "type": "Command[]",
-          "required": false
+          "required": true
         }
       ]
     },
@@ -1544,6 +1672,82 @@
         }
       ]
     },
+    "CleanupCommand": {
+      "file": "CleanupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "targetNodeIds",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "positionGetter",
+          "type": "(id: string) => { x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "sizeGetter",
+          "type": "(id: string) => NodeDims",
+          "required": true
+        },
+        {
+          "name": "isSchematic",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "gridSpacing",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "options",
+          "type": "CleanupOptions",
+          "required": false
+        }
+      ]
+    },
+    "CleanupEmptyLinkCommand": {
+      "file": "RerouteConductorCommand",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "planStore",
+          "type": "PlanStore",
+          "required": true
+        },
+        {
+          "name": "linkId",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "ClearAllLinkWaypointsCommand": {
+      "file": "ClearAllLinkWaypointsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "options",
+          "type": "RoutingScopeOptions",
+          "required": false
+        }
+      ]
+    },
     "ClearAllPinsCommand": {
       "file": "ClearAllPinsCommand",
       "domain": "svg-editor",
@@ -1680,6 +1884,28 @@
           "name": "workingHarnessStore",
           "type": "any",
           "required": true
+        }
+      ]
+    },
+    "ClearWaypointsForDraggedNodesCommand": {
+      "file": "ClearWaypointsForDraggedNodesCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "workingHarnessStore",
+          "type": "HarnessStoreDuck",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "type": "ClearWaypointsScope",
+          "required": true
+        },
+        {
+          "name": "protectedConnectionKeys",
+          "type": "Set<string>",
+          "required": false
         }
       ]
     },
@@ -1957,6 +2183,58 @@
         }
       ]
     },
+    "DebugApplyLegacyShiftCommand": {
+      "file": "DebugApplyLegacyShiftCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "DebugElkLayoutCommand": {
+      "file": "DebugElkLayoutCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "targetNodeIds",
+          "type": "readonly string[]",
+          "required": true
+        },
+        {
+          "name": "positionGetter",
+          "type": "(id: string) => { x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "sizeGetter",
+          "type": "(id: string) => NodeDims",
+          "required": true
+        },
+        {
+          "name": "isSchematic",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "skipPostPipeline",
+          "type": "boolean",
+          "required": false
+        }
+      ]
+    },
     "DeleteAssemblyRefCommand": {
       "file": "DeleteAssemblyRefCommand",
       "domain": "plan",
@@ -2064,6 +2342,14 @@
           "required": true
         }
       ]
+    },
+    "DeleteEmptyBundlesCommand": {
+      "file": "DeleteEmptyBundlesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": []
     },
     "DeleteNetCommand": {
       "file": "DeleteNetCommand",
@@ -2448,7 +2734,8 @@
       "file": "DistributeWithSpacingCommand",
       "domain": "plan",
       "stores": [
-        "planStore"
+        "planStore",
+        "windowStore"
       ],
       "params": [
         {
@@ -2665,23 +2952,6 @@
         }
       ]
     },
-    "FixWaypointsCommand": {
-      "file": "FixWaypointsCommand",
-      "domain": "harness-builder",
-      "stores": [],
-      "params": [
-        {
-          "name": "scope",
-          "type": "string[] | undefined",
-          "required": true
-        },
-        {
-          "name": "workingHarnessStore",
-          "type": "any",
-          "required": true
-        }
-      ]
-    },
     "FlipAllPinGendersCommand": {
       "file": "FlipAllPinGendersCommand",
       "domain": "svg-editor",
@@ -2785,30 +3055,28 @@
         }
       ]
     },
-    "ImportGeneratedHarnessCommand": {
-      "file": "ImportGeneratedHarnessCommand",
-      "domain": "harness-builder",
-      "stores": [],
+    "InformPositionsCommand": {
+      "file": "InformPositionsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
       "params": [
         {
-          "name": "store",
-          "type": "CommandStoreInterface",
-          "required": true
-        },
-        {
-          "name": "generatedHarness",
-          "type": "GeneratedHarnessData",
-          "required": true
-        },
-        {
-          "name": "mode",
-          "type": "'replace' | 'merge'",
-          "required": false
-        },
-        {
-          "name": "warnings",
+          "name": "targetNodeIds",
           "type": "string[]",
-          "required": false
+          "required": true
+        },
+        {
+          "name": "direction",
+          "type": "Direction",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": true
         }
       ]
     },
@@ -2977,6 +3245,30 @@
         }
       ]
     },
+    "MergeIntoTrunkCommand": {
+      "file": "MergeIntoTrunkCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "sourceLinkId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "consolidation",
+          "type": "ConsolidationPath",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
+        }
+      ]
+    },
     "MirrorStoreElementCommand": {
       "file": "MirrorStoreElementCommand",
       "domain": "svg-editor",
@@ -3070,6 +3362,43 @@
         {
           "name": "store",
           "type": "CommandStoreInterface",
+          "required": true
+        }
+      ]
+    },
+    "MoveDesignNoteCommand": {
+      "file": "MoveDesignNoteCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldX",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "oldY",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newX",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newY",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "store",
+          "type": "",
           "required": true
         }
       ]
@@ -3232,6 +3561,30 @@
         }
       ]
     },
+    "MovePlanNoteCommand": {
+      "file": "MovePlanNoteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "oldPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        },
+        {
+          "name": "newPosition",
+          "type": "{ x: number; y: number }",
+          "required": true
+        }
+      ]
+    },
     "MovePolygonPointCommand": {
       "file": "MovePolygonPointCommand",
       "domain": "svg-editor",
@@ -3340,12 +3693,12 @@
         {
           "name": "nodeIds",
           "type": "string[]",
-          "required": true
+          "required": false
         },
         {
           "name": "linkIds",
           "type": "string[]",
-          "required": true
+          "required": false
         }
       ]
     },
@@ -3474,6 +3827,16 @@
           "name": "clipboardBom",
           "type": "BomEntry[]",
           "required": false
+        },
+        {
+          "name": "clipboardJumperBars",
+          "type": "PlanJumperBar[]",
+          "required": false
+        },
+        {
+          "name": "preserveDesignators",
+          "type": "boolean",
+          "required": false
         }
       ]
     },
@@ -3547,6 +3910,23 @@
           "name": "pageId",
           "type": "string",
           "required": false
+        }
+      ]
+    },
+    "PromoteAutoWaypointsCommand": {
+      "file": "PromoteAutoWaypointsCommand",
+      "domain": "harness-builder",
+      "stores": [],
+      "params": [
+        {
+          "name": "store",
+          "type": "HarnessStoreDuck",
+          "required": true
+        },
+        {
+          "name": "promotions",
+          "type": "WaypointPromotion[]",
+          "required": true
         }
       ]
     },
@@ -3841,11 +4221,49 @@
         {
           "name": "nodeIds",
           "type": "string[]",
-          "required": true
+          "required": false
         },
         {
           "name": "linkIds",
           "type": "string[]",
+          "required": false
+        }
+      ]
+    },
+    "RemoveFromVisualGroupCommand": {
+      "file": "RemoveFromVisualGroupCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
+    "RemoveJumperBarCommand": {
+      "file": "RemoveJumperBarCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "jumperBarId",
+          "type": "string",
           "required": true
         }
       ]
@@ -3967,6 +4385,25 @@
         }
       ]
     },
+    "RemovePlanNoteCommand": {
+      "file": "RemovePlanNoteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
+        }
+      ]
+    },
     "RemoveWireGroupCommand": {
       "file": "RemoveWireGroupCommand",
       "domain": "plan",
@@ -4014,6 +4451,38 @@
           "name": "newEntries",
           "type": "BomEntry[]",
           "required": true
+        }
+      ]
+    },
+    "RerouteConductorCommand": {
+      "file": "RerouteConductorCommand",
+      "domain": "plan",
+      "stores": [],
+      "params": [
+        {
+          "name": "planStore",
+          "type": "PlanStore",
+          "required": true
+        },
+        {
+          "name": "conductorId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "'start' | 'end'",
+          "required": true
+        },
+        {
+          "name": "newEndpoint",
+          "type": "ConductorEndpoint",
+          "required": true
+        },
+        {
+          "name": "pageId",
+          "type": "string | null",
+          "required": false
         }
       ]
     },
@@ -4093,6 +4562,11 @@
           "name": "oldWidth",
           "type": "number",
           "required": true
+        },
+        {
+          "name": "posDelta",
+          "type": "ResizePositionDelta",
+          "required": false
         }
       ]
     },
@@ -4120,6 +4594,11 @@
           "name": "oldWidth",
           "type": "number",
           "required": true
+        },
+        {
+          "name": "posDelta",
+          "type": "ResizePositionDelta",
+          "required": false
         }
       ]
     },
@@ -4156,6 +4635,11 @@
         {
           "name": "oldHeight",
           "type": "number | undefined",
+          "required": false
+        },
+        {
+          "name": "posDelta",
+          "type": "ResizePositionDelta",
           "required": false
         }
       ]
@@ -4247,6 +4731,35 @@
           "name": "pageId",
           "type": "string | null",
           "required": false
+        }
+      ]
+    },
+    "ResizePlanNoteCommand": {
+      "file": "ResizePlanNoteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "newWidth",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "newHeight",
+          "type": "number | undefined",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
+          "required": true
         }
       ]
     },
@@ -4449,6 +4962,31 @@
         }
       ]
     },
+    "SetJunctionOffsetsCommand": {
+      "file": "SetJunctionOffsetsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "newTrunkYs",
+          "type": "Map<string, number | undefined>",
+          "required": true
+        },
+        {
+          "name": "newTapXOffsets",
+          "type": "Map<string, number>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
     "SetLinksPathStyleCommand": {
       "file": "SetLinksPathStyleCommand",
       "domain": "plan",
@@ -4519,6 +5057,11 @@
           "name": "newBehavior",
           "type": "MatingBehavior | undefined",
           "required": true
+        },
+        {
+          "name": "keepTerminations",
+          "type": "boolean",
+          "required": false
         }
       ]
     },
@@ -4553,6 +5096,46 @@
         {
           "name": "newOffsets",
           "type": "Map<string, LabelOffset>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetMultipleTapXOffsetsCommand": {
+      "file": "SetMultipleTapXOffsetsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "newOffsets",
+          "type": "Map<string, number>",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    "SetMultipleTrunkYPositionsCommand": {
+      "file": "SetMultipleTrunkYPositionsCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore",
+        "windowStore"
+      ],
+      "params": [
+        {
+          "name": "newPositions",
+          "type": "Map<string, number>",
           "required": true
         },
         {
@@ -4824,6 +5407,20 @@
         }
       ]
     },
+    "SmartAssignLinkSidesCommand": {
+      "file": "SmartAssignLinkSidesCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "options",
+          "type": "RoutingScopeOptions",
+          "required": true
+        }
+      ]
+    },
     "SplitLinkAtBranchPointCommand": {
       "file": "SplitLinkAtBranchPointCommand",
       "domain": "plan",
@@ -4839,6 +5436,11 @@
         {
           "name": "pageId",
           "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "branchPointPosition",
+          "type": "{ x: number; y: number }",
           "required": false
         }
       ]
@@ -5461,6 +6063,25 @@
         }
       ]
     },
+    "UpdateJumperBarCommand": {
+      "file": "UpdateJumperBarCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "jumperBarId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanJumperBar, 'id'>>",
+          "required": true
+        }
+      ]
+    },
     "UpdateLinkAccessoryCommand": {
       "file": "UpdateLinkAccessoryCommand",
       "domain": "plan",
@@ -5688,7 +6309,31 @@
         },
         {
           "name": "store",
-          "type": "",
+          "type": "PdfPageStore",
+          "required": true
+        }
+      ]
+    },
+    "UpdatePlanNoteCommand": {
+      "file": "UpdatePlanNoteCommand",
+      "domain": "plan",
+      "stores": [
+        "planStore"
+      ],
+      "params": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "updates",
+          "type": "Partial<Omit<PlanNote, 'id'>>",
+          "required": true
+        },
+        {
+          "name": "schematicMode",
+          "type": "boolean",
           "required": true
         }
       ]

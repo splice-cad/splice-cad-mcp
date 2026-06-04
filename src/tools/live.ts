@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Bridge } from '../bridge/types.js';
+import { validateCommandParams } from '../resources/commands.js';
 
 function errorResult(err: unknown) {
   return {
@@ -44,6 +45,8 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
     },
     async ({ command, params, namespace }) => {
       try {
+        const invalid = validateCommandParams(command, params);
+        if (invalid) return errorResult(new Error(invalid));
         const result = await getBridge().sendCommand(command, params, namespace);
         return {
           content: [{
@@ -70,6 +73,12 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
     },
     async ({ commands, description, namespace }) => {
       try {
+        // Validate up front — the batch runs atomically, so one bad command
+        // would roll back the whole set. Surface the offending index.
+        for (let i = 0; i < commands.length; i++) {
+          const invalid = validateCommandParams(commands[i].command, commands[i].params);
+          if (invalid) return errorResult(new Error(`commands[${i}] (${commands[i].command}): ${invalid}`));
+        }
         const result = await getBridge().sendCommandBatch(commands, description, namespace);
         return {
           content: [{

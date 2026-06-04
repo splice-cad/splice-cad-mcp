@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 (2026-06-02)
+
+### Command contract: discovery + validation
+
+- **`describe_command` tool** — look up the exact `params` keys a bridge command accepts before calling `execute_command`/`execute_commands`. Param key names are sourced from the frontend command registries (the real contract), which often differ from the command class constructor parameter names.
+- **`splice://commands` resource** — authoritative reference listing every bridge command and its accepted params, grouped by domain (plan/harness).
+- **Param validation in `execute_command`/`execute_commands`** — missing required params are now caught up front with an actionable message (e.g. `UpdateNodeCommand is missing required param(s): newValues`) instead of forwarding a payload that crashes the frontend with `Cannot read properties of undefined (reading 'label')`. Batch calls report the offending command index. Conservative by design: unknown/uncaptured commands and extra keys pass through; set `SPLICE_SKIP_VALIDATION=1` to disable.
+- **New `generate-bridge-commands.ts` codegen** — parses the frontend `agentCommandRegistry`/`harnessAgentCommandRegistry` builders to produce `generated/bridge-commands.json`. Wired into `npm run generate`.
+
 ## 0.4.0 (2026-04-01)
 
 ### Assembly Live Bridge

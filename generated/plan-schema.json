@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "Auto-generated JSON Schema for Splice PlanData types. Generated from frontend/src/interfaces/planInterfaces.ts",
-  "generated_at": "2026-03-27T20:39:48.206Z",
+  "generated_at": "2026-06-02T18:52:59.702Z",
   "types": {
     "PlanData": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -64,6 +64,12 @@
                 "$ref": "#/definitions/MateRelationship"
               }
             },
+            "jumperBars": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/PlanJumperBar"
+              }
+            },
             "deviceGroups": {
               "type": "array",
               "items": {
@@ -87,6 +93,59 @@
               "additionalProperties": {
                 "$ref": "#/definitions/VisualGroup"
               }
+            },
+            "planNotes": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/PlanNote"
+              }
+            },
+            "schematicPlanNotes": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/PlanNote"
+              },
+              "deprecated": "— migrated into planNotes with viewMode; kept for migration only"
+            },
+            "notePagePositions": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "deprecated": "— migrated to PlanNote.position; kept for migration only"
+            },
+            "notePageAssignments": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "deprecated": "— migrated to PlanNote.pageId; kept for migration only"
+            },
+            "noteClasses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PlanNoteClass"
+              },
+              "description": "Custom note classes (merged with DEFAULT_NOTE_CLASSES)"
             },
             "pages": {
               "type": "object",
@@ -276,6 +335,10 @@
             },
             "viewState": {
               "$ref": "#/definitions/PlanViewStateData"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "description": "Bumped when a schema migration ships. Absence/0 = pre-versioned plan."
             }
           },
           "required": [
@@ -395,6 +458,9 @@
             },
             "hideEmptyPins": {
               "type": "boolean"
+            },
+            "color": {
+              "type": "string"
             }
           },
           "required": [
@@ -496,6 +562,13 @@
             "quickdisconnect",
             "ring",
             "button",
+            "spade",
+            "lug",
+            "usb",
+            "barrel",
+            "header",
+            "coaxial",
+            "rj",
             "other"
           ]
         },
@@ -677,30 +750,37 @@
               "additionalProperties": false
             },
             "sourceExitSide": {
-              "type": "string",
-              "enum": [
-                "left",
-                "right",
-                "top",
-                "bottom",
-                "auto"
-              ]
+              "$ref": "#/definitions/ExitSide"
             },
             "targetExitSide": {
-              "type": "string",
-              "enum": [
-                "left",
-                "right",
-                "top",
-                "bottom",
-                "auto"
-              ]
+              "$ref": "#/definitions/ExitSide"
             },
             "sourceBend": {
               "$ref": "#/definitions/PlanLinkBendPoint"
             },
             "targetBend": {
               "$ref": "#/definitions/PlanLinkBendPoint"
+            },
+            "labelOffset": {
+              "type": "number"
+            },
+            "sheathWidth": {
+              "type": "number"
+            },
+            "bomEntryId": {
+              "type": "string"
+            },
+            "assemblyRefId": {
+              "type": "string"
+            },
+            "subassemblyInstanceId": {
+              "type": "string"
+            },
+            "accessories": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PlanLinkAccessory"
+              }
             }
           },
           "required": [
@@ -771,6 +851,16 @@
           ],
           "additionalProperties": false
         },
+        "ExitSide": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "auto"
+          ]
+        },
         "PlanLinkBendPoint": {
           "type": "object",
           "properties": {
@@ -781,27 +871,6 @@
             "radius": {
               "type": "number",
               "description": "Curve radius at the bend (0 = sharp corner, larger = smoother). Default: 12"
-            },
-            "labelOffset": {
-              "type": "number"
-            },
-            "sheathWidth": {
-              "type": "number"
-            },
-            "bomEntryId": {
-              "type": "string"
-            },
-            "assemblyRefId": {
-              "type": "string"
-            },
-            "subassemblyInstanceId": {
-              "type": "string"
-            },
-            "accessories": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PlanLinkAccessory"
-              }
             }
           },
           "required": [
@@ -828,10 +897,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID this position is measured from. Legacy data may store 'left' | 'right' — use resolveDatumEndpoint() before comparing."
             },
             "length": {
               "type": "number"
@@ -1229,6 +1295,53 @@
           ],
           "additionalProperties": false
         },
+        "PlanJumperBar": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "designator": {
+              "type": "string"
+            },
+            "positions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/JumperBarPosition"
+              }
+            },
+            "color": {
+              "type": "string"
+            },
+            "bomEntryId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "designator",
+            "positions"
+          ],
+          "additionalProperties": false,
+          "description": "PlanJumperBar - External Accessory Bridging Terminal Block Positions\n\nA jumper bar is a physical metal comb/bridge that electrically connects 2+ positions on one or more terminal blocks. Unlike `bridged_positions` (factory-internal wiring), a jumper bar is a separate purchasable part with its own BOM entry.\n\n## Single-Component Example ```typescript {   id: \"jb_123\",   designator: \"JB1\",   positions: [     { nodeId: \"tb1\", pinId: \"pin_1\" },     { nodeId: \"tb1\", pinId: \"pin_2\" },     { nodeId: \"tb1\", pinId: \"pin_3\" },   ],   color: \"#FF0000\", } ```\n\n## Cross-Component Example ```typescript {   id: \"jb_456\",   designator: \"JB2\",   positions: [     { nodeId: \"tb1\", pinId: \"pin_4\" },     { nodeId: \"tb2\", pinId: \"pin_1\" },   ], } ```"
+        },
+        "JumperBarPosition": {
+          "type": "object",
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "pinId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "nodeId",
+            "pinId"
+          ],
+          "additionalProperties": false,
+          "description": "A position on a terminal block that a jumper bar bridges"
+        },
         "DeviceGroup": {
           "type": "object",
           "properties": {
@@ -1336,6 +1449,7 @@
             "splice",
             "covering",
             "assembly",
+            "jumper_bar",
             "other"
           ]
         },
@@ -1670,10 +1784,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID. Legacy: 'left' | 'right'."
             },
             "length": {
               "type": "number"
@@ -1814,6 +1925,175 @@
           ],
           "additionalProperties": false,
           "description": "Represents a user-drawn rectangular frame that can contain nodes. Nodes inside the bounds are automatically members (with manual override). Supports nesting (groups inside groups)."
+        },
+        "PlanNote": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "$ref": "#/definitions/PlanNoteContent"
+            },
+            "position": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "additionalProperties": false
+            },
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            },
+            "pageId": {
+              "type": "string",
+              "description": "Which page this note lives on. undefined = visible on all pages."
+            },
+            "noteClass": {
+              "type": "string",
+              "description": "Note class key (label from PLAN_NOTE_CLASSES). undefined = no class (plain note)."
+            },
+            "viewMode": {
+              "$ref": "#/definitions/PlanNoteViewMode",
+              "description": "Which canvas mode the note is visible in. undefined = visible in both."
+            }
+          },
+          "required": [
+            "id",
+            "content",
+            "position",
+            "width"
+          ],
+          "additionalProperties": false
+        },
+        "PlanNoteContent": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/PlanNoteSingleContent"
+            },
+            {
+              "$ref": "#/definitions/PlanNoteNumberedContent"
+            },
+            {
+              "$ref": "#/definitions/PlanNoteTableContent"
+            }
+          ]
+        },
+        "PlanNoteSingleContent": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "single"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "text"
+          ],
+          "additionalProperties": false,
+          "description": "Single note: free-form paragraph text"
+        },
+        "PlanNoteNumberedContent": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "numbered"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "items"
+          ],
+          "additionalProperties": false,
+          "description": "Numbered list: ordered items"
+        },
+        "PlanNoteTableContent": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "table"
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "columnWidths": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Per-column width fractions (e.g. [0.4, 0.6]). If absent, equal distribution."
+            }
+          },
+          "required": [
+            "type",
+            "columns",
+            "rows"
+          ],
+          "additionalProperties": false,
+          "description": "Table: user-defined columns + rows"
+        },
+        "PlanNoteViewMode": {
+          "type": "string",
+          "enum": [
+            "layout",
+            "schematic"
+          ]
+        },
+        "PlanNoteClass": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "color"
+          ],
+          "additionalProperties": false,
+          "description": "Note class with label + accent color"
         },
         "PlanPage": {
           "type": "object",
@@ -2211,6 +2491,34 @@
             },
             "gridOpacity": {
               "type": "number"
+            },
+            "crossPageGhostPositions": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "hideEmptyPins": {
+              "type": "boolean"
+            },
+            "showCrossPageConnectorStubs": {
+              "type": "boolean"
             }
           },
           "additionalProperties": false,
@@ -2338,6 +2646,9 @@
             },
             "hideEmptyPins": {
               "type": "boolean"
+            },
+            "color": {
+              "type": "string"
             }
           },
           "required": [
@@ -2439,6 +2750,13 @@
             "quickdisconnect",
             "ring",
             "button",
+            "spade",
+            "lug",
+            "usb",
+            "barrel",
+            "header",
+            "coaxial",
+            "rj",
             "other"
           ]
         },
@@ -2626,30 +2944,37 @@
               "additionalProperties": false
             },
             "sourceExitSide": {
-              "type": "string",
-              "enum": [
-                "left",
-                "right",
-                "top",
-                "bottom",
-                "auto"
-              ]
+              "$ref": "#/definitions/ExitSide"
             },
             "targetExitSide": {
-              "type": "string",
-              "enum": [
-                "left",
-                "right",
-                "top",
-                "bottom",
-                "auto"
-              ]
+              "$ref": "#/definitions/ExitSide"
             },
             "sourceBend": {
               "$ref": "#/definitions/PlanLinkBendPoint"
             },
             "targetBend": {
               "$ref": "#/definitions/PlanLinkBendPoint"
+            },
+            "labelOffset": {
+              "type": "number"
+            },
+            "sheathWidth": {
+              "type": "number"
+            },
+            "bomEntryId": {
+              "type": "string"
+            },
+            "assemblyRefId": {
+              "type": "string"
+            },
+            "subassemblyInstanceId": {
+              "type": "string"
+            },
+            "accessories": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PlanLinkAccessory"
+              }
             }
           },
           "required": [
@@ -2720,6 +3045,16 @@
           ],
           "additionalProperties": false
         },
+        "ExitSide": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "auto"
+          ]
+        },
         "PlanLinkBendPoint": {
           "type": "object",
           "properties": {
@@ -2730,27 +3065,6 @@
             "radius": {
               "type": "number",
               "description": "Curve radius at the bend (0 = sharp corner, larger = smoother). Default: 12"
-            },
-            "labelOffset": {
-              "type": "number"
-            },
-            "sheathWidth": {
-              "type": "number"
-            },
-            "bomEntryId": {
-              "type": "string"
-            },
-            "assemblyRefId": {
-              "type": "string"
-            },
-            "subassemblyInstanceId": {
-              "type": "string"
-            },
-            "accessories": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PlanLinkAccessory"
-              }
             }
           },
           "required": [
@@ -2777,10 +3091,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID this position is measured from. Legacy data may store 'left' | 'right' — use resolveDatumEndpoint() before comparing."
             },
             "length": {
               "type": "number"
@@ -3473,6 +3784,7 @@
             "splice",
             "covering",
             "assembly",
+            "jumper_bar",
             "other"
           ]
         },
@@ -3816,10 +4128,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID. Legacy: 'left' | 'right'."
             },
             "length": {
               "type": "number"
@@ -4242,10 +4551,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID. Legacy: 'left' | 'right'."
             },
             "length": {
               "type": "number"
@@ -4406,10 +4712,7 @@
             },
             "datum": {
               "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "description": "Endpoint component ID this position is measured from. Legacy data may store 'left' | 'right' — use resolveDatumEndpoint() before comparing."
             },
             "length": {
               "type": "number"
@@ -5335,20 +5638,8 @@
               "type": "number"
             },
             "datum": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/HDirection"
-                },
-                {
-                  "type": "string",
-                  "const": "left"
-                },
-                {
-                  "type": "string",
-                  "const": "right"
-                }
-              ],
-              "description": "Reference connector for position measurement."
+              "type": "string",
+              "description": "Endpoint component ID the position is measured from (connector/cable instance). Legacy data may store 'left' | 'right' or HDirection — callers must resolve via resolveDatumEndpoint() before comparing or using as an ID."
             },
             "length": {
               "type": "number"
@@ -5419,13 +5710,6 @@
             "boot"
           ]
         },
-        "HDirection": {
-          "type": "string",
-          "enum": [
-            "left",
-            "right"
-          ]
-        },
         "PhysicalLayoutData": {
           "type": "object",
           "properties": {
@@ -5490,12 +5774,6 @@
                 "$ref": "#/definitions/ElementPosition"
               }
             },
-            "leaders": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/LeaderLine"
-              }
-            },
             "column_widths": {
               "type": "object",
               "additionalProperties": {
@@ -5510,9 +5788,6 @@
             },
             "title_block": {
               "$ref": "#/definitions/TitleBlockConfig"
-            },
-            "wire_code_table": {
-              "$ref": "#/definitions/WireCodeTableConfig"
             },
             "part_variants_table": {
               "$ref": "#/definitions/PartVariantsTableConfig"
@@ -5552,15 +5827,6 @@
             },
             "overall_length": {
               "$ref": "#/definitions/OverallLengthConfig"
-            },
-            "specification_tables": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SpecificationTableConfig"
-              }
-            },
-            "mechanical_requirements": {
-              "$ref": "#/definitions/MechanicalRequirementsConfig"
             },
             "cross_section_details": {
               "type": "array",
@@ -5698,6 +5964,13 @@
             "custom"
           ]
         },
+        "HDirection": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
         "DetailView": {
           "type": "object",
           "properties": {
@@ -5780,71 +6053,6 @@
             "y"
           ],
           "additionalProperties": false
-        },
-        "LeaderLine": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "label": {
-              "type": "string"
-            },
-            "source_type": {
-              "$ref": "#/definitions/LeaderAttachmentType"
-            },
-            "source_element_id": {
-              "type": "string"
-            },
-            "source_x": {
-              "type": "number"
-            },
-            "source_y": {
-              "type": "number"
-            },
-            "target_type": {
-              "$ref": "#/definitions/LeaderAttachmentType"
-            },
-            "target_element_id": {
-              "type": "string"
-            },
-            "target_x": {
-              "type": "number"
-            },
-            "target_y": {
-              "type": "number"
-            },
-            "arrow_style": {
-              "type": "string",
-              "enum": [
-                "none",
-                "open",
-                "closed",
-                "dot"
-              ]
-            }
-          },
-          "required": [
-            "id",
-            "source_type",
-            "source_x",
-            "source_y",
-            "target_type",
-            "target_x",
-            "target_y"
-          ],
-          "additionalProperties": false
-        },
-        "LeaderAttachmentType": {
-          "type": "string",
-          "enum": [
-            "free",
-            "connector",
-            "bundle",
-            "table",
-            "note",
-            "cross_section"
-          ]
         },
         "DrawingElementVisibility": {
           "type": "object",
@@ -5990,46 +6198,6 @@
           "required": [
             "visible",
             "position"
-          ],
-          "additionalProperties": false
-        },
-        "WireCodeTableConfig": {
-          "type": "object",
-          "properties": {
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "bundle_key": {
-              "type": "string"
-            },
-            "show_colors": {
-              "type": "boolean"
-            },
-            "show_wire_numbers": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "visible",
-            "position",
-            "show_colors",
-            "show_wire_numbers"
           ],
           "additionalProperties": false
         },
@@ -6441,11 +6609,65 @@
             "showEdgeLabels": {
               "type": "boolean"
             },
+            "showEdgeLengths": {
+              "type": "boolean"
+            },
+            "showEdgeTolerances": {
+              "type": "boolean"
+            },
+            "showWireCountBadge": {
+              "type": "boolean"
+            },
+            "showDatumIndicators": {
+              "type": "boolean"
+            },
             "showStripLengths": {
               "type": "boolean"
             },
             "showAccessoryDimensions": {
               "type": "boolean"
+            },
+            "connectorLabelOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "pinNumberOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeLabelOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeLengthOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeToleranceOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeWireCountOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeDatumOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
             },
             "layoutStyle": {
               "type": "string",
@@ -6629,6 +6851,12 @@
                   "y"
                 ],
                 "additionalProperties": false
+              }
+            },
+            "edgeLabelTextOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
               }
             },
             "showBundleLabels": {
@@ -7188,6 +7416,23 @@
           "properties": {
             "companyName": {
               "type": "string"
+            },
+            "logoId": {
+              "type": "string"
+            },
+            "logoPosition": {
+              "type": "string",
+              "enum": [
+                "left",
+                "right"
+              ]
+            },
+            "logoScale": {
+              "type": "number"
+            },
+            "logoWidthPercent": {
+              "type": "number",
+              "description": "Logo area width as percentage of title block width (5-50, default 25)"
             },
             "drawingNumber": {
               "type": "string"
@@ -7864,140 +8109,6 @@
             "show_tolerance",
             "show_dual_units",
             "position"
-          ],
-          "additionalProperties": false
-        },
-        "SpecificationTableConfig": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "table_type": {
-              "type": "string",
-              "enum": [
-                "general_spec",
-                "wire_spec",
-                "accessory_spec",
-                "connector_housing",
-                "terminal_contact"
-              ]
-            },
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "title": {
-              "type": "string"
-            },
-            "subtitle": {
-              "type": "string"
-            },
-            "rows": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "value"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "sheet_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "table_type",
-            "visible",
-            "position",
-            "title",
-            "rows"
-          ],
-          "additionalProperties": false
-        },
-        "MechanicalRequirementsConfig": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "requirements": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "requirements": {
-                    "type": "string"
-                  },
-                  "procedure": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "requirements",
-                  "procedure"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "sheet_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "visible",
-            "position",
-            "requirements"
           ],
           "additionalProperties": false
         },
@@ -8936,20 +9047,8 @@
               "type": "number"
             },
             "datum": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/HDirection"
-                },
-                {
-                  "type": "string",
-                  "const": "left"
-                },
-                {
-                  "type": "string",
-                  "const": "right"
-                }
-              ],
-              "description": "Reference connector for position measurement."
+              "type": "string",
+              "description": "Endpoint component ID the position is measured from (connector/cable instance). Legacy data may store 'left' | 'right' or HDirection — callers must resolve via resolveDatumEndpoint() before comparing or using as an ID."
             },
             "length": {
               "type": "number"
@@ -9020,13 +9119,6 @@
             "boot"
           ]
         },
-        "HDirection": {
-          "type": "string",
-          "enum": [
-            "left",
-            "right"
-          ]
-        },
         "PhysicalLayoutData": {
           "type": "object",
           "properties": {
@@ -9091,12 +9183,6 @@
                 "$ref": "#/definitions/ElementPosition"
               }
             },
-            "leaders": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/LeaderLine"
-              }
-            },
             "column_widths": {
               "type": "object",
               "additionalProperties": {
@@ -9111,9 +9197,6 @@
             },
             "title_block": {
               "$ref": "#/definitions/TitleBlockConfig"
-            },
-            "wire_code_table": {
-              "$ref": "#/definitions/WireCodeTableConfig"
             },
             "part_variants_table": {
               "$ref": "#/definitions/PartVariantsTableConfig"
@@ -9153,15 +9236,6 @@
             },
             "overall_length": {
               "$ref": "#/definitions/OverallLengthConfig"
-            },
-            "specification_tables": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SpecificationTableConfig"
-              }
-            },
-            "mechanical_requirements": {
-              "$ref": "#/definitions/MechanicalRequirementsConfig"
             },
             "cross_section_details": {
               "type": "array",
@@ -9299,6 +9373,13 @@
             "custom"
           ]
         },
+        "HDirection": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
         "DetailView": {
           "type": "object",
           "properties": {
@@ -9381,71 +9462,6 @@
             "y"
           ],
           "additionalProperties": false
-        },
-        "LeaderLine": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "label": {
-              "type": "string"
-            },
-            "source_type": {
-              "$ref": "#/definitions/LeaderAttachmentType"
-            },
-            "source_element_id": {
-              "type": "string"
-            },
-            "source_x": {
-              "type": "number"
-            },
-            "source_y": {
-              "type": "number"
-            },
-            "target_type": {
-              "$ref": "#/definitions/LeaderAttachmentType"
-            },
-            "target_element_id": {
-              "type": "string"
-            },
-            "target_x": {
-              "type": "number"
-            },
-            "target_y": {
-              "type": "number"
-            },
-            "arrow_style": {
-              "type": "string",
-              "enum": [
-                "none",
-                "open",
-                "closed",
-                "dot"
-              ]
-            }
-          },
-          "required": [
-            "id",
-            "source_type",
-            "source_x",
-            "source_y",
-            "target_type",
-            "target_x",
-            "target_y"
-          ],
-          "additionalProperties": false
-        },
-        "LeaderAttachmentType": {
-          "type": "string",
-          "enum": [
-            "free",
-            "connector",
-            "bundle",
-            "table",
-            "note",
-            "cross_section"
-          ]
         },
         "DrawingElementVisibility": {
           "type": "object",
@@ -9591,46 +9607,6 @@
           "required": [
             "visible",
             "position"
-          ],
-          "additionalProperties": false
-        },
-        "WireCodeTableConfig": {
-          "type": "object",
-          "properties": {
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "bundle_key": {
-              "type": "string"
-            },
-            "show_colors": {
-              "type": "boolean"
-            },
-            "show_wire_numbers": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "visible",
-            "position",
-            "show_colors",
-            "show_wire_numbers"
           ],
           "additionalProperties": false
         },
@@ -10042,11 +10018,65 @@
             "showEdgeLabels": {
               "type": "boolean"
             },
+            "showEdgeLengths": {
+              "type": "boolean"
+            },
+            "showEdgeTolerances": {
+              "type": "boolean"
+            },
+            "showWireCountBadge": {
+              "type": "boolean"
+            },
+            "showDatumIndicators": {
+              "type": "boolean"
+            },
             "showStripLengths": {
               "type": "boolean"
             },
             "showAccessoryDimensions": {
               "type": "boolean"
+            },
+            "connectorLabelOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "pinNumberOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeLabelOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeLengthOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeToleranceOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeWireCountOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
+            },
+            "edgeDatumOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "boolean"
+              }
             },
             "layoutStyle": {
               "type": "string",
@@ -10230,6 +10260,12 @@
                   "y"
                 ],
                 "additionalProperties": false
+              }
+            },
+            "edgeLabelTextOverrides": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
               }
             },
             "showBundleLabels": {
@@ -10789,6 +10825,23 @@
           "properties": {
             "companyName": {
               "type": "string"
+            },
+            "logoId": {
+              "type": "string"
+            },
+            "logoPosition": {
+              "type": "string",
+              "enum": [
+                "left",
+                "right"
+              ]
+            },
+            "logoScale": {
+              "type": "number"
+            },
+            "logoWidthPercent": {
+              "type": "number",
+              "description": "Logo area width as percentage of title block width (5-50, default 25)"
             },
             "drawingNumber": {
               "type": "string"
@@ -11472,140 +11525,6 @@
             "show_tolerance",
             "show_dual_units",
             "position"
-          ],
-          "additionalProperties": false
-        },
-        "SpecificationTableConfig": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "table_type": {
-              "type": "string",
-              "enum": [
-                "general_spec",
-                "wire_spec",
-                "accessory_spec",
-                "connector_housing",
-                "terminal_contact"
-              ]
-            },
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "title": {
-              "type": "string"
-            },
-            "subtitle": {
-              "type": "string"
-            },
-            "rows": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "value"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "sheet_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "table_type",
-            "visible",
-            "position",
-            "title",
-            "rows"
-          ],
-          "additionalProperties": false
-        },
-        "MechanicalRequirementsConfig": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "visible": {
-              "type": "boolean"
-            },
-            "position": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "x",
-                "y"
-              ],
-              "additionalProperties": false
-            },
-            "requirements": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "requirements": {
-                    "type": "string"
-                  },
-                  "procedure": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "requirements",
-                  "procedure"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "sheet_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "visible",
-            "position",
-            "requirements"
           ],
           "additionalProperties": false
         },
@@ -12567,6 +12486,16 @@
             "splice",
             "diode",
             "flying_lead",
+            "sensor",
+            "solenoid",
+            "led",
+            "speaker",
+            "heater",
+            "thermostat",
+            "potentiometer",
+            "generator",
+            "indicator",
+            "ground",
             "other"
           ]
         },
@@ -12581,6 +12510,13 @@
             "quickdisconnect",
             "ring",
             "button",
+            "spade",
+            "lug",
+            "usb",
+            "barrel",
+            "header",
+            "coaxial",
+            "rj",
             "other"
           ]
         },

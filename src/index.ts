@@ -9,6 +9,7 @@ import { registerHarnessTools } from './tools/harnesses.js';
 import { registerSchemaResource } from './resources/schema.js';
 import { registerHarnessSchemaResource } from './resources/harness-schema.js';
 import { registerExamplesResource } from './resources/examples.js';
+import { registerCommandResource } from './resources/commands.js';
 import { registerLiveTools } from './tools/live.js';
 import type { Bridge } from './bridge/types.js';
 import { BridgeServer } from './bridge/ws-server.js';
@@ -33,7 +34,7 @@ if (!SPLICE_API_URL || !SPLICE_API_KEY) {
 
 const server = new McpServer({
   name: 'splice-cad',
-  version: '0.2.0',
+  version: '0.5.0',
   description: 'MCP server for Splice CAD — search parts, build harness plans, create components with rich specs, and generate manufacturing documentation.',
 });
 
@@ -61,6 +62,7 @@ registerLiveTools(server, getBridge);
 registerSchemaResource(server);
 registerHarnessSchemaResource(server);
 registerExamplesResource(server);
+registerCommandResource(server);
 
 // Register prompts
 registerPrompts(server);

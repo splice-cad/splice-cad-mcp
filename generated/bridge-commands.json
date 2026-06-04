@@ -1,0 +1,2659 @@
+{
+  "description": "Auto-generated from the frontend agent command registries. Maps each bridge command to the exact `params` keys its builder reads. This is the contract for execute_command/execute_commands — match these keys, not the constructor parameter names.",
+  "generated_at": "2026-06-02T18:53:02.994Z",
+  "command_count": 185,
+  "commands": {
+    "AddNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "node",
+          "required": true,
+          "type": "PlanNode"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "RemoveNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newValues",
+          "required": true,
+          "type": "NodeUpdates"
+        }
+      ]
+    },
+    "MoveNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldPosition",
+          "required": true,
+          "type": "Position"
+        },
+        {
+          "name": "newPosition",
+          "required": true,
+          "type": "Position"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "MoveNodesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "NodePositionChange[]"
+        },
+        {
+          "name": "description",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "ResizeNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldSize",
+          "required": true,
+          "type": "Size | undefined"
+        },
+        {
+          "name": "newSize",
+          "required": true,
+          "type": "Size"
+        },
+        {
+          "name": "oldPosition",
+          "required": false,
+          "type": "Position"
+        },
+        {
+          "name": "newPosition",
+          "required": false,
+          "type": "Position"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "ResizeNodesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "NodeResizeChange[]"
+        }
+      ]
+    },
+    "SetNodesSizeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "width"
+        },
+        {
+          "name": "height"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "ConvertNodeTypeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "targetType",
+          "required": true,
+          "type": "PlanNodeType"
+        },
+        {
+          "name": "targetCategory",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "SetNodePigtailLeadsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "leads"
+        }
+      ]
+    },
+    "UpdateNodePinsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newPins",
+          "required": true,
+          "type": "ComponentPin[] | undefined"
+        },
+        {
+          "name": "pins"
+        }
+      ]
+    },
+    "UpdateNodeBridgedPositionsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "bridgedPositions"
+        }
+      ]
+    },
+    "AddNodesFromBomCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodes",
+          "required": true,
+          "type": "PlanNode[]"
+        }
+      ]
+    },
+    "AddLinkCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "link",
+          "required": true,
+          "type": "PlanLink"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "RemoveLinkCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateLinkCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newValues",
+          "required": true,
+          "type": "LinkUpdates"
+        }
+      ]
+    },
+    "ResetLinksPathCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkIds",
+          "required": true,
+          "type": "string[]"
+        }
+      ]
+    },
+    "SetLinksPathStyleCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "pathStyle"
+        }
+      ]
+    },
+    "RedirectLinkCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newSourceNodeId"
+        },
+        {
+          "name": "newTargetNodeId"
+        }
+      ]
+    },
+    "AddLinkAccessoryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "accessory",
+          "required": true,
+          "type": "PlanLinkAccessory"
+        }
+      ]
+    },
+    "RemoveLinkAccessoryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "accessoryIndex"
+        }
+      ]
+    },
+    "UpdateLinkAccessoryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "accessoryIndex"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<PlanLinkAccessory, 'id'>>"
+        }
+      ]
+    },
+    "AddNewConductorCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductor",
+          "required": true,
+          "type": "PlanConductor"
+        }
+      ]
+    },
+    "RemoveNewConductorCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateNewConductorCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<PlanConductor, 'id'>>"
+        }
+      ]
+    },
+    "SetNewConductorEndpointsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "startEndpoint"
+        },
+        {
+          "name": "endEndpoint"
+        }
+      ]
+    },
+    "RerouteConductorsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "newLinkPath",
+          "required": true,
+          "type": "string[]"
+        }
+      ]
+    },
+    "AddWireGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "wireGroup",
+          "required": true,
+          "type": "PlanWireGroup"
+        }
+      ]
+    },
+    "RemoveWireGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "wireGroupId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateWireGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "wireGroupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<PlanWireGroup, 'id'>>"
+        }
+      ]
+    },
+    "UnlinkConductorFromWireGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "wireGroupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AddCableCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "cable",
+          "required": true,
+          "type": "PlanCable"
+        }
+      ]
+    },
+    "RemoveCableCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateCableCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<PlanCable, 'id'>>"
+        }
+      ]
+    },
+    "SyncCableCoresCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "spec"
+        }
+      ]
+    },
+    "AddBomEntryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "entry",
+          "required": true,
+          "type": "BomEntry"
+        }
+      ]
+    },
+    "UpdateBomEntryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "bomEntryId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates"
+        }
+      ]
+    },
+    "DeleteBomEntryCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "bomEntryId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "RemoveUnassignedBomEntriesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "unassignedIds"
+        }
+      ]
+    },
+    "AssignBomToNodeCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "bomEntryId",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "syncOptions",
+          "required": false,
+          "type": "BomPinSyncOptions"
+        }
+      ]
+    },
+    "AssignBomToLinkCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "bomEntryId",
+          "required": true,
+          "type": "string | undefined"
+        }
+      ]
+    },
+    "AssignBomToConductorCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "bomEntryId",
+          "required": true,
+          "type": "string | undefined"
+        }
+      ]
+    },
+    "AddSignalCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "signal",
+          "required": true,
+          "type": "PlanSignalDefinition"
+        }
+      ]
+    },
+    "UpdateSignalCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "signalId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates"
+        }
+      ]
+    },
+    "DeleteSignalCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "signalId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AddNetCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "net",
+          "required": true,
+          "type": "PlanNet"
+        }
+      ]
+    },
+    "UpdateNetCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "netName",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newValues",
+          "required": true,
+          "type": "Partial<PlanNet>"
+        }
+      ]
+    },
+    "DeleteNetCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "netName",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AddMateCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "connector1Id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "connector2Id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "required": false,
+          "type": "AddMateOptions"
+        }
+      ]
+    },
+    "SetMateCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "connector1Id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "connector2Id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "required": false,
+          "type": "SetMateOptions"
+        }
+      ]
+    },
+    "ClearMateCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "connectorId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "RemoveMateCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "mateId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateMatePinMappingCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "mateId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "mappingIndex",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "side",
+          "required": true,
+          "type": "'pin1' | 'pin2'"
+        },
+        {
+          "name": "newPinId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AlignMatesToPinsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "AlignMatePositionChange[]"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "SetMatingBehaviorCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "behavior"
+        },
+        {
+          "name": "keepTerminations",
+          "required": false,
+          "type": "boolean"
+        }
+      ]
+    },
+    "CreateDeviceGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "nodeIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "options",
+          "required": false,
+          "type": "{ partNumber?: string; description?: string; color?: string; }"
+        }
+      ]
+    },
+    "DeleteDeviceGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "groupId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateDeviceGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "groupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates"
+        }
+      ]
+    },
+    "AddToDeviceGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "groupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "RemoveFromDeviceGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "CreateVisualGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodes"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "schematicMode",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "DeleteVisualGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "groupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "schematicMode",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "UpdateVisualGroupCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "groupId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<VisualGroup, 'id'>>"
+        },
+        {
+          "name": "schematicMode",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "AddConductorSpliceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "splice",
+          "required": true,
+          "type": "ConductorSplice"
+        }
+      ]
+    },
+    "RemoveConductorSpliceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "spliceId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateConductorSpliceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "spliceId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<ConductorSplice, 'id'>>"
+        }
+      ]
+    },
+    "MoveConductorSpliceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "spliceId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newBranchPointId"
+        }
+      ]
+    },
+    "AddBranchPointPartCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "part",
+          "required": true,
+          "type": "BranchPointPart"
+        }
+      ]
+    },
+    "RemoveBranchPointPartCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "partIndex"
+        }
+      ]
+    },
+    "UpdateBranchPointPartCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "partIndex"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<BranchPointPart, 'id'>>"
+        }
+      ]
+    },
+    "AddJumperBarCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "positions",
+          "required": true,
+          "type": "JumperBarPosition[]"
+        },
+        {
+          "name": "options",
+          "required": false,
+          "type": "{ color?: string; bomEntryId?: string }"
+        }
+      ]
+    },
+    "RemoveJumperBarCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "jumperBarId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateJumperBarCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "jumperBarId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<Omit<PlanJumperBar, 'id'>>"
+        }
+      ]
+    },
+    "UpdateBranchPointRoutingCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "coreMapping"
+        }
+      ]
+    },
+    "SetContactPartCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "termination"
+        },
+        {
+          "name": "contactPart",
+          "required": true,
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }"
+        }
+      ]
+    },
+    "SetWirePnCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "conductorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "wirePartId"
+        }
+      ]
+    },
+    "BulkSetContactCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "gauge",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "termination",
+          "required": true,
+          "type": "EndpointTermination"
+        },
+        {
+          "name": "contactPart",
+          "required": false,
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }"
+        }
+      ]
+    },
+    "BulkSetWirePnCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "mode",
+          "required": true,
+          "type": "BulkWirePnMode"
+        },
+        {
+          "name": "wirePart",
+          "required": true,
+          "type": "{ sourcePartId?: string; mpn: string; manufacturer: string; description?: string; spec?: BomEntrySpec; datasheet_url?: string; }"
+        }
+      ]
+    },
+    "SplitLinkAtBranchPointCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "branchPointId"
+        }
+      ]
+    },
+    "InlineBranchPointCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "branchPointId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "MergeBundlesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkIds"
+        },
+        {
+          "name": "pageId"
+        }
+      ]
+    },
+    "MergeBranchPointsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "branchPointIds"
+        },
+        {
+          "name": "targetBranchPointId"
+        }
+      ]
+    },
+    "MergeDuplicateLinksCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "linkIds"
+        }
+      ]
+    },
+    "MoveBPToBundleCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "branchPointId"
+        },
+        {
+          "name": "targetLinkId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "position"
+        }
+      ]
+    },
+    "PlaceAssemblyCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "entry"
+        },
+        {
+          "name": "position",
+          "required": true,
+          "type": "{ x: number; y: number }"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "DissolveAssemblyRefCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "assemblyRefId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AddPageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "page",
+          "required": true,
+          "type": "PlanPage"
+        }
+      ]
+    },
+    "UpdatePageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "pageId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newValues",
+          "required": true,
+          "type": "Partial<PlanPage>"
+        }
+      ]
+    },
+    "ReorderPagesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "newOrder",
+          "required": true,
+          "type": "string[]"
+        }
+      ]
+    },
+    "AssignToPageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "pageId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "nodeIds",
+          "required": false,
+          "type": "string[]"
+        },
+        {
+          "name": "linkIds",
+          "required": false,
+          "type": "string[]"
+        }
+      ]
+    },
+    "RemoveFromPageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "pageId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "nodeIds",
+          "required": false,
+          "type": "string[]"
+        },
+        {
+          "name": "linkIds",
+          "required": false,
+          "type": "string[]"
+        }
+      ]
+    },
+    "MoveToPageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "targetPageId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "nodeIds",
+          "required": false,
+          "type": "string[]"
+        },
+        {
+          "name": "linkIds",
+          "required": false,
+          "type": "string[]"
+        }
+      ]
+    },
+    "DuplicatePageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "sourcePageId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "RemovePageCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "pageId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "deleteMode",
+          "required": true,
+          "type": "'delete' | 'reassign'"
+        },
+        {
+          "name": "reassignToPageId",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "AlignNodesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "alignmentType",
+          "required": true,
+          "type": "AlignmentType"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        },
+        {
+          "name": "gridSpacing",
+          "required": false,
+          "type": "number"
+        }
+      ]
+    },
+    "DistributeNodesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "direction"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        },
+        {
+          "name": "gridSpacing",
+          "required": false,
+          "type": "number"
+        }
+      ]
+    },
+    "DistributeWithSpacingCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "NodePositionChange[]"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "FitNodesToContentCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "NodeFitChange[]"
+        },
+        {
+          "name": "description",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "ResizeSchematicCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "SchematicResizeChange[]"
+        },
+        {
+          "name": "description",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "MoveSchematicPositionsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "NodePositionChange[]"
+        },
+        {
+          "name": "pageId"
+        }
+      ]
+    },
+    "ResetAllJogOffsetsCommand": {
+      "domain": "plan",
+      "params": []
+    },
+    "SetJogXOffsetCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "nodeId"
+        },
+        {
+          "name": "offset"
+        }
+      ]
+    },
+    "SetMultipleJogXOffsetsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "offsets"
+        },
+        {
+          "name": "pageId"
+        }
+      ]
+    },
+    "SetMultipleLabelOffsetsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "offsets"
+        },
+        {
+          "name": "pageId"
+        }
+      ]
+    },
+    "MoveMultipleLabelsCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "changes",
+          "required": true,
+          "type": "Map<string, { oldOffset: number; newOffset: number }>"
+        }
+      ]
+    },
+    "BulkPlanConnectCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "sourceNodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "targetNodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "connections",
+          "required": true,
+          "type": "BulkConnection[]"
+        },
+        {
+          "name": "connectionTypeOverride",
+          "required": false,
+          "type": "ConnectionType"
+        }
+      ]
+    },
+    "BulkEditPlanCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "beforeSnapshot",
+          "required": true,
+          "type": "PlanData"
+        },
+        {
+          "name": "afterSnapshot",
+          "required": true,
+          "type": "PlanData"
+        },
+        {
+          "name": "description",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "BulkMateCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "hubNodeId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "entries",
+          "required": true,
+          "type": "BulkMateEntry[]"
+        }
+      ]
+    },
+    "ClearPlanCanvasCommand": {
+      "domain": "plan",
+      "params": []
+    },
+    "RedesignateNodesCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "direction",
+          "required": true,
+          "type": "RedesignateDirection"
+        },
+        {
+          "name": "scope",
+          "required": true,
+          "type": "RedesignateScope"
+        },
+        {
+          "name": "nodeIds",
+          "required": false,
+          "type": "string[]"
+        },
+        {
+          "name": "collision",
+          "required": false,
+          "type": "RedesignateCollision"
+        },
+        {
+          "name": "prefixOverrides",
+          "required": false,
+          "type": "Map<string, string>"
+        },
+        {
+          "name": "enabledGroupKeys",
+          "required": false,
+          "type": "Set<string>"
+        },
+        {
+          "name": "pageNodeIds",
+          "required": false,
+          "type": "string[]"
+        }
+      ]
+    },
+    "InsertFragmentCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "fragment",
+          "required": true,
+          "type": "PlanFragment"
+        },
+        {
+          "name": "offsetPosition"
+        },
+        {
+          "name": "pageId",
+          "required": false,
+          "type": "string | null"
+        }
+      ]
+    },
+    "DrcDismissCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "warningKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "dismiss",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "DrcClearDismissalsCommand": {
+      "domain": "plan",
+      "params": []
+    },
+    "UpdateSubassemblyInstanceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "instanceId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates"
+        }
+      ]
+    },
+    "DissolveSubassemblyInstanceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "instanceId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteSubassemblyInstanceCommand": {
+      "domain": "plan",
+      "params": [
+        {
+          "name": "instanceId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "AddPartsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "items",
+          "required": true,
+          "type": "AddPartDto[]"
+        },
+        {
+          "name": "viewportState",
+          "required": false,
+          "type": "ViewportState"
+        }
+      ]
+    },
+    "AddPartCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "partItems",
+          "required": true,
+          "type": "AddPartDto[]"
+        }
+      ]
+    },
+    "DeletePartsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "keys",
+          "required": true,
+          "type": "string[]"
+        }
+      ]
+    },
+    "RemovePartCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "partKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "BulkConnectionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connections",
+          "required": true,
+          "type": "Array<{ end1: ConnectionTermination; end2: ConnectionTermination; wire?: WirePart; }>"
+        }
+      ]
+    },
+    "AddConnectionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "end1",
+          "required": true,
+          "type": "ConnectionTermination"
+        },
+        {
+          "name": "end2",
+          "required": true,
+          "type": "ConnectionTermination"
+        },
+        {
+          "name": "wire",
+          "required": true,
+          "type": "WirePart | undefined"
+        },
+        {
+          "name": "unit",
+          "required": true,
+          "type": "string | undefined"
+        }
+      ]
+    },
+    "RemoveConnectionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectionKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "MoveConnectionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectionKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "fromTermination",
+          "required": true,
+          "type": "ConnectionTermination"
+        },
+        {
+          "name": "toTermination",
+          "required": true,
+          "type": "ConnectionTermination"
+        }
+      ]
+    },
+    "DeleteWireCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteWireBundleCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteCableCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteCableConnectionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableWireKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteConnectorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectorKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "BulkMoveCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "selectedItems",
+          "required": true,
+          "type": "SelectedItemsByType"
+        },
+        {
+          "name": "deltaX",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "deltaY",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "AutoArrangeCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "selectedItems"
+        },
+        {
+          "name": "gridSpacing",
+          "required": false,
+          "type": "number"
+        }
+      ]
+    },
+    "AlignCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "selectedItems",
+          "required": true,
+          "type": "AlignableItems"
+        },
+        {
+          "name": "direction",
+          "required": true,
+          "type": "AlignDirection"
+        },
+        {
+          "name": "gridSpacing",
+          "required": false,
+          "type": "number"
+        }
+      ]
+    },
+    "AutoRouteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "selectedItems",
+          "required": true,
+          "type": "SelectedItemsByType"
+        }
+      ]
+    },
+    "ResizeConnectorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newWidth",
+          "required": true,
+          "type": "number | undefined"
+        },
+        {
+          "name": "oldWidth",
+          "required": true,
+          "type": "number | undefined"
+        },
+        {
+          "name": "newHeight",
+          "required": false,
+          "type": "number | undefined"
+        },
+        {
+          "name": "oldHeight",
+          "required": false,
+          "type": "number | undefined"
+        }
+      ]
+    },
+    "ResizeCableCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newWidth",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "oldWidth",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "ResizeBundleCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newWidth",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "oldWidth",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "EditConnectorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "partKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newPartData",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    "EditWireCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "partKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newPartData",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    "EditCableCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "partKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newPartData",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    "BulkEditWireCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "updates",
+          "required": true,
+          "type": "BulkWireUpdate[]"
+        }
+      ]
+    },
+    "BulkEditWirePropertiesCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "updates",
+          "required": true,
+          "type": "WirePropertyUpdate[]"
+        }
+      ]
+    },
+    "SwapConnectorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "swapData",
+          "required": true,
+          "type": "SwapPartData"
+        }
+      ]
+    },
+    "SwapWireCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "swapData",
+          "required": true,
+          "type": "SwapPartData"
+        }
+      ]
+    },
+    "SwapCableCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "swapData",
+          "required": true,
+          "type": "SwapPartData"
+        }
+      ]
+    },
+    "SwapPinCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "swapData",
+          "required": true,
+          "type": "SwapPinData"
+        }
+      ]
+    },
+    "BulkWireSwapCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bulkSwapData",
+          "required": true,
+          "type": "BulkWireSwapData"
+        }
+      ]
+    },
+    "AddBundleLabelCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "label",
+          "required": true,
+          "type": "BundleLabel"
+        }
+      ]
+    },
+    "UpdateBundleLabelCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "labelId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<BundleLabel>"
+        }
+      ]
+    },
+    "RemoveBundleLabelCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "labelId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateSignalLabelCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldLabel",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newLabel",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "UpdateSignalLabelsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldLabelEnd1",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "oldLabelEnd2",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "newLabelEnd1",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "newLabelEnd2",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "mode",
+          "required": true,
+          "type": "LabelUpdateMode"
+        }
+      ]
+    },
+    "AddDesignNoteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "noteData",
+          "required": true,
+          "type": "Omit<DesignNote, 'id' | 'created_at'>"
+        }
+      ]
+    },
+    "EditDesignNoteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "noteId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldContent",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "newContent",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "oldTitle",
+          "required": true,
+          "type": "string | undefined"
+        },
+        {
+          "name": "newTitle",
+          "required": true,
+          "type": "string | undefined"
+        }
+      ]
+    },
+    "RemoveDesignNoteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "noteId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "ResizeDesignNoteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "noteId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldWidth",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "newWidth",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "UpdateWireLengthCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldLength",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "newLength",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "UpdateCableLengthCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldLength",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "newLength",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "UpdateBundleLengthCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldLength",
+          "required": true,
+          "type": "number | undefined"
+        },
+        {
+          "name": "newLength",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "BulkStraightThroughCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "config",
+          "required": true,
+          "type": "StraightThroughConfig"
+        }
+      ]
+    },
+    "BulkCrossoverCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "config",
+          "required": true,
+          "type": "CrossoverConfig"
+        }
+      ]
+    },
+    "BulkCableCoreCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "config",
+          "required": true,
+          "type": "CableBulkConfig"
+        }
+      ]
+    },
+    "BulkRenameCablesCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "renames",
+          "required": true,
+          "type": "Map<string, string>"
+        }
+      ]
+    },
+    "ConvertCableToWiresCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "ConvertWireBundleToCableCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "required": false,
+          "type": "{ cableMpn?: string; cableManufacturer?: string; shielded?: boolean; }"
+        }
+      ]
+    },
+    "ClearWaypointsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectionKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "ClearAllWaypointsCommand": {
+      "domain": "harness",
+      "params": []
+    },
+    "ClearBundleWaypointsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireInstanceIds",
+          "required": true,
+          "type": "string[]"
+        }
+      ]
+    },
+    "MoveWireAnchorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "anchorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldAnchor",
+          "required": true,
+          "type": "WireAnchor"
+        },
+        {
+          "name": "newAnchor",
+          "required": true,
+          "type": "WireAnchor"
+        }
+      ]
+    },
+    "CollapseAllCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "newCollapsedState",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "CollapseConnectorPinsCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "connectorId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newCollapsedState",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "name": "previousCollapsedState",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "CollapseCableCoresCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "cableId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "newCollapsedState",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "name": "previousCollapsedState",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "UpdateBundlePropertiesCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "BundlePropertiesUpdates"
+        }
+      ]
+    },
+    "AddBundleAccessoryCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "accessoryData",
+          "required": true,
+          "type": "Omit<BundleAccessory, 'id'>"
+        }
+      ]
+    },
+    "UpdateBundleAccessoryCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "accessoryId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "oldState",
+          "required": true,
+          "type": "Partial<BundleAccessory>"
+        },
+        {
+          "name": "newState",
+          "required": true,
+          "type": "Partial<BundleAccessory>"
+        }
+      ]
+    },
+    "RemoveBundleAccessoryCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "accessoryId",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "SetBundleVisibilityCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "hidden",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "SetBundleCompactCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "bundleIds",
+          "required": true,
+          "type": "string[]"
+        },
+        {
+          "name": "compact",
+          "required": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    "UpdateTwistedPairCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wires",
+          "required": true,
+          "type": "WirePairData | WirePairData[]"
+        }
+      ]
+    },
+    "UpdateCustomDesignatorCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "designatorChanges",
+          "required": true,
+          "type": "Map<string, string | undefined>"
+        }
+      ]
+    },
+    "CopyCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "selectedKeys",
+          "required": true,
+          "type": "{ connectors: string[]; cables: string[]; notes: string[]; wires?: string[]; wireBundles?: string[]; }"
+        }
+      ]
+    },
+    "PasteCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "pastePosition"
+        }
+      ]
+    },
+    "InsertSpliceCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "wireKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "clickPosition",
+          "required": false,
+          "type": "{ x: number; y: number }"
+        }
+      ]
+    },
+    "AddSplicePositionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "spliceKey",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "DeleteSplicePositionCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "spliceKey",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "pinNumber",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    "UpdateBomItemCommand": {
+      "domain": "harness",
+      "params": [
+        {
+          "name": "instanceId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "updates",
+          "required": true,
+          "type": "Partial<ExpandedBomItem>"
+        }
+      ]
+    }
+  }
+}
