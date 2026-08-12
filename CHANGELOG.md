@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6.0 (2026-08-12)
+
+### Command discovery: nested param schemas
+
+- **`describe_command` now expands object params.** A param typed as a known PlanData type (e.g. `link: PlanLink`) is expanded to its nested `fields` with required flags — so `AddLinkCommand` now surfaces that `link` needs `sourceNodeId`/`targetNodeId`, instead of an opaque type name. Backed by cross-linking `generated/plan-schema.json` (`src/resources/typeSchema.ts`).
+- **Nested required-field validation.** `execute_command`/`execute_commands` now reject an object param missing required sub-fields (e.g. an `AddLinkCommand` `link` without `sourceNodeId`/`targetNodeId`) — which the app otherwise accepts as a silent orphan bundle. Conservative: only fires for types with a known schema; `SPLICE_SKIP_VALIDATION=1` bypasses.
+
+### Structured DRC output
+
+- **`validate_plan` returns structured findings.** Each is `{ code, severity, message, involvedNodeIds, involvedConductorIds, involvedLinkIds, involvedMateIds, suggestedFix? }` with a stable machine `code` (e.g. `BUNDLE_BAD_SOURCE`, `CONDUCTOR_DIRECT_TERMINAL_POINT`, `MATE_INCOMPATIBLE`) so agents can triage/auto-resolve. The flat `warnings` string array is kept for back-compat.
+
+### Version / capability guard
+
+- **App capability negotiation.** Frontend tabs now advertise their `appVersion` and supported command list at registration; `is_bridge_connected` surfaces the version per tab.
+- **Command guard.** `execute_command`/`execute_commands` refuse to dispatch a command the connected app build doesn't support, with a clear "requires a newer app build" message (naming the app version) instead of a cryptic "Unknown command". Assumes-supported when the app advertises no capabilities (older builds), so it never blocks existing setups.
+
 ## 0.5.0 (2026-06-02)
 
 ### Command contract: discovery + validation

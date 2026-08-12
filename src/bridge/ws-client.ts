@@ -33,8 +33,17 @@ export class BridgeClient implements Bridge {
     return this.connected && this.ws?.readyState === WebSocket.OPEN;
   }
 
-  getConnectedNamespaces(): Array<{ namespace: string; label?: string }> {
+  getConnectedNamespaces(): Array<{ namespace: string; label?: string; appVersion?: string }> {
     return this.connectedNamespaces;
+  }
+
+  /**
+   * In client mode the MCP connects to an app-hosted server that doesn't relay
+   * per-tab capabilities, so we can't know them — return undefined and let the
+   * caller assume supported (back-compat).
+   */
+  getClientCapabilities(): { appVersion?: string; commands?: string[] } | undefined {
+    return undefined;
   }
 
   async start(): Promise<void> {

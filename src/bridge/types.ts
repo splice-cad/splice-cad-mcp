@@ -8,7 +8,14 @@ export interface CommandResult {
 export interface Bridge {
   readonly isConnected: boolean;
   getSecret(): string;
-  getConnectedNamespaces(): Array<{ namespace: string; label?: string }>;
+  getConnectedNamespaces(): Array<{ namespace: string; label?: string; appVersion?: string }>;
+  /**
+   * Capabilities the target client advertised at registration (resolved the same
+   * way as sendCommand's namespace). Returns undefined when unknown — e.g. an
+   * older app that doesn't declare capabilities — so callers must treat undefined
+   * as "assume supported" for back-compat.
+   */
+  getClientCapabilities(namespace?: string): { appVersion?: string; commands?: string[] } | undefined;
   start(): Promise<void>;
   stop(): void;
   sendCommand(command: string, params: Record<string, unknown>, namespace?: string): Promise<CommandResult>;

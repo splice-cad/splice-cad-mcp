@@ -44,4 +44,20 @@ describe('validateCommandParams', () => {
     expect(err).toContain('newValues'); // tells them the real required key
     expect(err).toContain('updates'); // echoes what they provided
   });
+
+  it('rejects an AddLinkCommand link missing nested required fields (orphan-bundle footgun)', () => {
+    const err = validateCommandParams('AddLinkCommand', { link: { id: 'l1' } });
+    expect(err).toBeTruthy();
+    expect(err).toContain('sourceNodeId');
+    expect(err).toContain('targetNodeId');
+    expect(err).toContain('link');
+  });
+
+  it('passes an AddLinkCommand with a fully-anchored link', () => {
+    expect(
+      validateCommandParams('AddLinkCommand', {
+        link: { id: 'l1', sourceNodeId: 'a', targetNodeId: 'b' },
+      }),
+    ).toBeNull();
+  });
 });

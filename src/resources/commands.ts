@@ -12,6 +12,7 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import bridgeCommandsData from '../../generated/bridge-commands.json';
+import { expandType, missingNestedRequired } from './typeSchema.js';
 
 interface BridgeParam {
   name: string;
@@ -66,14 +67,33 @@ export function validateCommandParams(
 
   const provided = new Set(Object.keys(params ?? {}));
   const missing = cmd.params.filter(p => p.required && !provided.has(p.name)).map(p => p.name);
-  if (missing.length === 0) return null;
+  if (missing.length > 0) {
+    return (
+      `Command "${command}" is missing required param(s): ${missing.join(', ')}. ` +
+      `Expected params: ${signature(cmd)}. ` +
+      `You provided: ${provided.size ? `{ ${[...provided].join(', ')} }` : '{}'}. ` +
+      `Call describe_command or read the splice://commands resource for details.`
+    );
+  }
 
-  return (
-    `Command "${command}" is missing required param(s): ${missing.join(', ')}. ` +
-    `Expected params: ${signature(cmd)}. ` +
-    `You provided: ${provided.size ? `{ ${[...provided].join(', ')} }` : '{}'}. ` +
-    `Call describe_command or read the splice://commands resource for details.`
-  );
+  // Nested required-field check for provided object params whose type is a known
+  // PlanData domain type. This catches the silent-orphan footgun — e.g. an
+  // AddLinkCommand `link` object missing sourceNodeId/targetNodeId, which the app
+  // otherwise accepts as a dangling bundle. Conservative: only fires for types we
+  // have a schema for (missingNestedRequired returns [] otherwise).
+  for (const p of cmd.params) {
+    if (!provided.has(p.name)) continue;
+    const missingNested = missingNestedRequired(p.type, params?.[p.name]);
+    if (missingNested.length > 0) {
+      return (
+        `Command "${command}" param "${p.name}" (${p.type}) is missing required field(s): ` +
+        `${missingNested.join(', ')}. Call describe_command("${command}") for the full field ` +
+        `list, or set SPLICE_SKIP_VALIDATION=1 to bypass.`
+      );
+    }
+  }
+
+  return null;
 }
 
 // ── Resource + tool registration ─────────────────────────────────────────
@@ -114,7 +134,8 @@ export function registerCommandResource(server: McpServer) {
     'describe_command',
     'Look up the exact params keys a bridge command accepts (for execute_command/execute_commands). ' +
       'Use this whenever unsure what params a command needs — the keys are NOT always the same as the ' +
-      'constructor parameter names.',
+      'constructor parameter names. Object params of a known PlanData type (e.g. `link: PlanLink`) are ' +
+      'expanded to their nested `fields`, so required sub-fields like sourceNodeId/targetNodeId are shown.',
     {
       command: z.string().describe('Command class name, e.g. "UpdateNodeCommand".'),
     },
@@ -139,6 +160,13 @@ export function registerCommandResource(server: McpServer) {
           }],
         };
       }
+      // Expand object params whose type is a known PlanData domain type, so the
+      // required nested fields (e.g. PlanLink.sourceNodeId/targetNodeId) are
+      // visible here instead of only in the separate plan-schema resource.
+      const params = cmd.params.map(p => {
+        const fields = expandType(p.type);
+        return fields ? { ...p, fields } : p;
+      });
       return {
         content: [{
           type: 'text' as const,
@@ -148,7 +176,7 @@ export function registerCommandResource(server: McpServer) {
               command,
               domain: cmd.domain,
               signature: signature(cmd),
-              params: cmd.params,
+              params,
             },
             null,
             2,

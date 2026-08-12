@@ -1,6 +1,6 @@
 {
   "name": "@splice-cad/mcp",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "MCP server for Splice CAD — search parts, build harness plans, create components with rich specs, and generate manufacturing documentation",
   "type": "module",
   "main": "dist/index.js",

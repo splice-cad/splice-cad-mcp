@@ -335,15 +335,41 @@ function summarizePlan(plan: PlanData): PlanSummary {
     })),
     conductor_count: conductors.length,
     unconnected_pins: unconnected,
-    warnings: validatePlan(plan),
+    warnings: validatePlan(plan).map(f => f.message),
   };
 }
 
-function validatePlan(plan: PlanData): string[] {
-  const warnings: string[] = [];
+/** Machine-actionable DRC finding. `message` preserves the human-readable text;
+ *  the `involved*` id arrays and `code` let an agent triage/auto-resolve. */
+export interface DrcFinding {
+  code:
+    | 'NODE_NO_BUNDLE'
+    | 'NODE_NO_PART'
+    | 'CONDUCTOR_BAD_NODE_REF'
+    | 'CONDUCTOR_BAD_PIN_REF'
+    | 'CONDUCTOR_BAD_LINK_REF'
+    | 'CONDUCTOR_NO_LINKPATH'
+    | 'CONDUCTOR_DIRECT_TERMINAL_POINT'
+    | 'BUNDLE_BAD_SOURCE'
+    | 'BUNDLE_BAD_TARGET'
+    | 'MATE_INCOMPATIBLE'
+    | 'TERMINAL_POINT_SHAPE_MISMATCH'
+    | 'TERMINAL_BLOCK_CATEGORY_MISSING';
+  severity: 'error' | 'warning';
+  message: string;
+  involvedNodeIds?: string[];
+  involvedConductorIds?: string[];
+  involvedLinkIds?: string[];
+  involvedMateIds?: string[];
+  suggestedFix?: string;
+}
+
+export function validatePlan(plan: PlanData): DrcFinding[] {
+  const findings: DrcFinding[] = [];
   const nodes = plan.nodes ?? {};
   const links = plan.links ?? {};
   const conductors = Object.values(plan.conductors ?? {});
+  const add = (f: DrcFinding) => findings.push(f);
 
   // Check for orphan nodes (no links connected)
   const linkedNodeIds = new Set<string>();
@@ -353,7 +379,12 @@ function validatePlan(plan: PlanData): string[] {
   }
   for (const node of Object.values(nodes)) {
     if (!linkedNodeIds.has(node.id) && Object.keys(links).length > 0) {
-      warnings.push(`${node.label} is not connected to any bundle.`);
+      add({
+        code: 'NODE_NO_BUNDLE',
+        severity: 'warning',
+        message: `${node.label} is not connected to any bundle.`,
+        involvedNodeIds: [node.id],
+      });
     }
   }
 
@@ -363,13 +394,25 @@ function validatePlan(plan: PlanData): string[] {
       if (!ep?.nodeId) continue;
       const node = nodes[ep.nodeId];
       if (!node) {
-        warnings.push(`Conductor ${cond.id} references non-existent node ${ep.nodeId}.`);
+        add({
+          code: 'CONDUCTOR_BAD_NODE_REF',
+          severity: 'error',
+          message: `Conductor ${cond.id} references non-existent node ${ep.nodeId}.`,
+          involvedConductorIds: [cond.id],
+          involvedNodeIds: [ep.nodeId],
+        });
         continue;
       }
       if (ep.pinId && node.type === 'component') {
         const pin = node.pins?.find(p => p.id === ep.pinId);
         if (!pin) {
-          warnings.push(`Conductor ${cond.id} references non-existent pin ${ep.pinId} on ${node.label}.`);
+          add({
+            code: 'CONDUCTOR_BAD_PIN_REF',
+            severity: 'error',
+            message: `Conductor ${cond.id} references non-existent pin ${ep.pinId} on ${node.label}.`,
+            involvedConductorIds: [cond.id],
+            involvedNodeIds: [node.id],
+          });
         }
       }
     }
@@ -378,31 +421,59 @@ function validatePlan(plan: PlanData): string[] {
     if (cond.linkPath) {
       for (const linkId of cond.linkPath) {
         if (!links[linkId]) {
-          warnings.push(`Conductor ${cond.id} references non-existent link ${linkId} in linkPath.`);
+          add({
+            code: 'CONDUCTOR_BAD_LINK_REF',
+            severity: 'error',
+            message: `Conductor ${cond.id} references non-existent link ${linkId} in linkPath.`,
+            involvedConductorIds: [cond.id],
+            involvedLinkIds: [linkId],
+          });
         }
       }
     }
 
     // Check conductor has linkPath
     if (!cond.linkPath || cond.linkPath.length === 0) {
-      warnings.push(`Conductor ${cond.id} has no linkPath — it won't appear on any bundle.`);
+      add({
+        code: 'CONDUCTOR_NO_LINKPATH',
+        severity: 'warning',
+        message: `Conductor ${cond.id} has no linkPath — it won't appear on any bundle.`,
+        involvedConductorIds: [cond.id],
+      });
     }
   }
 
   // Check links reference valid nodes
   for (const link of Object.values(links)) {
     if (!nodes[link.sourceNodeId]) {
-      warnings.push(`Bundle ${link.id} references non-existent source node ${link.sourceNodeId}.`);
+      add({
+        code: 'BUNDLE_BAD_SOURCE',
+        severity: 'error',
+        message: `Bundle ${link.id} references non-existent source node ${link.sourceNodeId}.`,
+        involvedLinkIds: [link.id],
+        involvedNodeIds: [link.sourceNodeId],
+      });
     }
     if (!nodes[link.targetNodeId]) {
-      warnings.push(`Bundle ${link.id} references non-existent target node ${link.targetNodeId}.`);
+      add({
+        code: 'BUNDLE_BAD_TARGET',
+        severity: 'error',
+        message: `Bundle ${link.id} references non-existent target node ${link.targetNodeId}.`,
+        involvedLinkIds: [link.id],
+        involvedNodeIds: [link.targetNodeId],
+      });
     }
   }
 
   // Check for components without parts
   for (const node of Object.values(nodes)) {
     if (node.type === 'component' && !node.bomEntryId) {
-      warnings.push(`${node.label} has no part assigned.`);
+      add({
+        code: 'NODE_NO_PART',
+        severity: 'warning',
+        message: `${node.label} has no part assigned.`,
+        involvedNodeIds: [node.id],
+      });
     }
   }
 
@@ -413,9 +484,15 @@ function validatePlan(plan: PlanData): string[] {
       const node = nodes[ep.nodeId];
       if (!node) continue;
       if (getNodeMating(node) === 'terminal_point') {
-        warnings.push(
-          `Conductor ${cond.id} terminates directly at terminal point ${node.label} — use an intermediary termination node (ferrule/ring/quickdisconnect).`
-        );
+        add({
+          code: 'CONDUCTOR_DIRECT_TERMINAL_POINT',
+          severity: 'warning',
+          message: `Conductor ${cond.id} terminates directly at terminal point ${node.label} — use an intermediary termination node (ferrule/ring/quickdisconnect).`,
+          involvedConductorIds: [cond.id],
+          involvedNodeIds: [node.id],
+          suggestedFix:
+            'Insert an intermediary termination (ferrule/ring/quickdisconnect) at this conductor end and mate it to the terminal point. save_plan auto-inserts a ferrule; for ring/quickdisconnect use an InsertTermination flow.',
+        });
       }
     }
   }
@@ -432,9 +509,13 @@ function validatePlan(plan: PlanData): string[] {
       (b1 === 'termination' && b2 === 'terminal_point') ||
       (b1 === 'terminal_point' && b2 === 'termination');
     if (!valid) {
-      warnings.push(
-        `Mate ${mate.id}: cannot mate ${node1.label} (${b1}) to ${node2.label} (${b2}) — only connector↔connector and termination↔terminal_point are valid.`
-      );
+      add({
+        code: 'MATE_INCOMPATIBLE',
+        severity: 'error',
+        message: `Mate ${mate.id}: cannot mate ${node1.label} (${b1}) to ${node2.label} (${b2}) — only connector↔connector and termination↔terminal_point are valid.`,
+        involvedMateIds: [mate.id],
+        involvedNodeIds: [node1.id, node2.id],
+      });
     }
   }
 
@@ -445,18 +526,24 @@ function validatePlan(plan: PlanData): string[] {
     const hasTPCategory = node.category === 'terminal_point';
     const hasTBShape = node.shape === 'terminal_block';
     if (hasTPCategory && !hasTBShape) {
-      warnings.push(
-        `${node.label} has category "terminal_point" but no terminal_block shape — it will behave as a connector, not a terminal point.`
-      );
+      add({
+        code: 'TERMINAL_POINT_SHAPE_MISMATCH',
+        severity: 'warning',
+        message: `${node.label} has category "terminal_point" but no terminal_block shape — it will behave as a connector, not a terminal point.`,
+        involvedNodeIds: [node.id],
+      });
     }
     if (hasTBShape && !hasTPCategory) {
-      warnings.push(
-        `${node.label} has terminal_block shape but missing category "terminal_point" — designator and icon will be wrong.`
-      );
+      add({
+        code: 'TERMINAL_BLOCK_CATEGORY_MISSING',
+        severity: 'warning',
+        message: `${node.label} has terminal_block shape but missing category "terminal_point" — designator and icon will be wrong.`,
+        involvedNodeIds: [node.id],
+      });
     }
   }
 
-  return warnings;
+  return findings;
 }
 
 // ── Tool registration ───────────────────────────────────────────────────
@@ -584,20 +671,21 @@ export function registerPlanTools(server: McpServer, getClient: () => SpliceApiC
 
   server.tool(
     'validate_plan',
-    'Validate a project\'s plan for structural issues: orphan nodes, dangling conductors, missing parts, invalid references, mating compatibility, terminal point wiring, and shape/category consistency. Returns structured JSON with warnings array.',
+    'Validate a project\'s plan for structural issues: orphan nodes, dangling conductors, missing parts, invalid references, mating compatibility, terminal point wiring, and shape/category consistency. Returns structured findings — each with a machine code, severity, involved node/conductor/link/mate IDs, and (where applicable) a suggestedFix — so an agent can triage or auto-resolve them. `warnings` is a flat list of the human-readable messages for back-compat.',
     {
       project_id: z.string().describe('Project UUID'),
     },
     async ({ project_id }) => {
       const plan = await getClient().getPlan(project_id);
-      const warnings = validatePlan(plan.doc as unknown as PlanData);
+      const findings = validatePlan(plan.doc as unknown as PlanData);
       return {
         content: [{
           type: 'text' as const,
           text: JSON.stringify({
-            valid: warnings.length === 0,
-            warning_count: warnings.length,
-            warnings,
+            valid: findings.length === 0,
+            warning_count: findings.length,
+            findings,
+            warnings: findings.map(f => f.message),
           }, null, 2),
         }],
       };

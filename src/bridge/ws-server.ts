@@ -14,6 +14,8 @@ interface ConnectedClient {
   ws: WebSocket;
   namespace: string;  // e.g. "project:uuid" or "harness:uuid"
   label?: string;     // human-readable, e.g. "Engine Harness"
+  appVersion?: string;      // build version the tab advertised at registration
+  commands?: string[];      // command names this build supports (plan + harness)
 }
 
 /**
@@ -45,11 +47,24 @@ export class BridgeServer implements Bridge {
   }
 
   /** List all connected namespaces with labels */
-  getConnectedNamespaces(): Array<{ namespace: string; label?: string }> {
+  getConnectedNamespaces(): Array<{ namespace: string; label?: string; appVersion?: string }> {
     return Array.from(this.clients.values()).map(c => ({
       namespace: c.namespace,
       label: c.label,
+      appVersion: c.appVersion,
     }));
+  }
+
+  /** Capabilities the target client advertised (undefined = unknown → assume supported). */
+  getClientCapabilities(namespace?: string): { appVersion?: string; commands?: string[] } | undefined {
+    let client: ConnectedClient;
+    try {
+      client = this.resolveClient(namespace);
+    } catch {
+      return undefined;
+    }
+    if (client.appVersion === undefined && client.commands === undefined) return undefined;
+    return { appVersion: client.appVersion, commands: client.commands };
   }
 
   async start(): Promise<void> {
@@ -72,6 +87,10 @@ export class BridgeServer implements Bridge {
             }
             clientNamespace = msg.namespace || 'default';
             const label = msg.label;
+            const appVersion = typeof msg.appVersion === 'string' ? msg.appVersion : undefined;
+            const commands = Array.isArray(msg.commands)
+              ? (msg.commands as unknown[]).filter((c): c is string => typeof c === 'string')
+              : undefined;
 
             // Close existing client on same namespace
             const existing = this.clients.get(clientNamespace!);
@@ -79,7 +98,7 @@ export class BridgeServer implements Bridge {
               existing.ws.close(1000, 'Replaced by new tab');
             }
 
-            this.clients.set(clientNamespace!, { ws, namespace: clientNamespace!, label });
+            this.clients.set(clientNamespace!, { ws, namespace: clientNamespace!, label, appVersion, commands });
             this.defaultNamespace = clientNamespace;
             console.error(`[bridge] Client registered: ${clientNamespace}${label ? ` (${label})` : ''} — ${this.clients.size} total`);
             return;

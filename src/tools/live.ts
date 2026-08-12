@@ -15,6 +15,26 @@ function errorResult(err: unknown) {
   };
 }
 
+/**
+ * Version/capability guard: refuse to dispatch a command the connected app build
+ * doesn't support, with a clear message, instead of letting it fail as a cryptic
+ * "Unknown command". Returns an error string, or null when the command is safe to
+ * send (supported, an undo/redo sentinel, or the app's capabilities are unknown —
+ * older apps that don't advertise them, in which case we assume supported).
+ */
+export function unsupportedCommandError(bridge: Bridge, command: string, namespace?: string): string | null {
+  if (command.startsWith('__')) return null; // __undo / __redo sentinels
+  const caps = bridge.getClientCapabilities(namespace);
+  if (!caps?.commands) return null; // unknown → assume supported (back-compat)
+  if (caps.commands.includes(command)) return null;
+  return (
+    `Command "${command}" is not available in the connected Splice app` +
+    (caps.appVersion ? ` (version ${caps.appVersion})` : '') +
+    `. It requires a newer app build. Update Splice, or read the splice://commands ` +
+    `resource for the commands this app supports.`
+  );
+}
+
 export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
   server.tool(
     'is_bridge_connected',
@@ -45,9 +65,12 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
     },
     async ({ command, params, namespace }) => {
       try {
+        const bridge = getBridge();
+        const unsupported = unsupportedCommandError(bridge, command, namespace);
+        if (unsupported) return errorResult(new Error(unsupported));
         const invalid = validateCommandParams(command, params);
         if (invalid) return errorResult(new Error(invalid));
-        const result = await getBridge().sendCommand(command, params, namespace);
+        const result = await bridge.sendCommand(command, params, namespace);
         return {
           content: [{
             type: 'text' as const,
@@ -73,13 +96,16 @@ export function registerLiveTools(server: McpServer, getBridge: () => Bridge) {
     },
     async ({ commands, description, namespace }) => {
       try {
+        const bridge = getBridge();
         // Validate up front — the batch runs atomically, so one bad command
         // would roll back the whole set. Surface the offending index.
         for (let i = 0; i < commands.length; i++) {
+          const unsupported = unsupportedCommandError(bridge, commands[i].command, namespace);
+          if (unsupported) return errorResult(new Error(`commands[${i}] (${commands[i].command}): ${unsupported}`));
           const invalid = validateCommandParams(commands[i].command, commands[i].params);
           if (invalid) return errorResult(new Error(`commands[${i}] (${commands[i].command}): ${invalid}`));
         }
-        const result = await getBridge().sendCommandBatch(commands, description, namespace);
+        const result = await bridge.sendCommandBatch(commands, description, namespace);
         return {
           content: [{
             type: 'text' as const,
